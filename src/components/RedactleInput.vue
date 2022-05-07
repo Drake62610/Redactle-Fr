@@ -23,7 +23,9 @@
 </template>
 
 <script lang="ts">
-export default {
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   name: 'RedactleInput',
   data() {
     return {
@@ -36,5 +38,5 @@ export default {
       this.$emit("update", this.inputField);
     },
   },
-}
+});
 </script>

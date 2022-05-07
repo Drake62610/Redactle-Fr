@@ -1,8 +1,9 @@
 <script lang="ts">
 import axios from 'axios'
 import { commonWords } from '@/assets/commonWords'
+import { defineComponent } from 'vue'
 
-export default {
+export default defineComponent({
   props: {
     guess: String,
   },
@@ -269,20 +270,20 @@ export default {
           // }
 
           // wikiHolder.style.display = 'flex'
-          this.isReady = true
+          this.isReady = true;
         })
     } catch (error) {
       console.log(error)
     }
   },
-}
+})
 </script>
 
 <template>
   <div
     v-if="isReady"
     class="mw-parser-output"
-    v-html="this.cleanHtml.body.innerHTML"
+    v-html="cleanHtml.body.innerHTML"
   ></div>
 </template>
 

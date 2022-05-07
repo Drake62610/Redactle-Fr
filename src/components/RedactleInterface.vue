@@ -1,11 +1,11 @@
 <script setup lang="ts">
-
 import RedactleInput from '@/components/RedactleInput.vue'
 import RedactleArticle from '@/components/RedactleArticle.vue'
+import { defineComponent } from 'vue'
 </script>
 
 <script lang="ts">
-export default {
+export default defineComponent({
   name: 'RedactleInterface',
   data() {
     return {
@@ -15,10 +15,9 @@ export default {
   methods: {
     inputUpdated(event: string) {
       this.guess = event;
-      console.log(this.guess);
     },
   },
-}
+});
 </script>
 
 <template>
@@ -55,7 +54,7 @@ export default {
     <div class="container container-lg" id="winText"></div>
 
     <div class="container container-lg wikiHolder">
-      <RedactleArticle :guess="this.guess"/>
+      <RedactleArticle :guess="guess"/>
     </div>
 
     <div class="bg-dark fixed-bottom">
