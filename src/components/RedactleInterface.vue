@@ -1,11 +1,30 @@
 <script setup lang="ts">
+
+import RedactleInput from '@/components/RedactleInput.vue'
 import RedactleArticle from '@/components/RedactleArticle.vue'
+</script>
+
+<script lang="ts">
+export default {
+  name: 'RedactleInterface',
+  data() {
+    return {
+      guess: ""
+    };
+  },
+  methods: {
+    inputUpdated(event: string) {
+      this.guess = event;
+      console.log(this.guess);
+    },
+  },
+}
 </script>
 
 <template>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-      <span class="navbar-brand mb-0 h1 mx-4">Redactle</span>
+      <span class="navbar-brand mb-0 h1 mx-4">Redactle FR</span>
       <button
         class="navbar-toggler mx-2"
         type="button"
@@ -17,28 +36,6 @@ import RedactleArticle from '@/components/RedactleArticle.vue'
       >
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse ms-5" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link mx-2" href="#" id="infoBtn">Info</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link mx-2" href="#" id="statsBtn">Stats</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link mx-2" href="#" id="settingsBtn">Settings</a>
-          </li>
-          <li class="nav-item">
-            <a
-              class="nav-link mx-2"
-              href="https://www.patreon.com/jhntrnr"
-              target="_blank"
-            >
-              Patreon
-            </a>
-          </li>
-        </ul>
-      </div>
     </nav>
     <nav
       class="navbar navbar-expand-lg navbar-dark bg-dark fixed-right overflow-auto"
@@ -54,251 +51,17 @@ import RedactleArticle from '@/components/RedactleArticle.vue'
         <tbody id="guessLogBody"></tbody>
       </table>
     </nav>
-    <div class="bg-dark fixed-bottom" id="inputHolder">
-      <div class="input-group m-3" id="inGrp">
-        <button class="btn btn-outline-secondary" type="button" id="backToTop">
-          &#9650; Top
-        </button>
-        <input
-          type="text"
-          class="form-text-lg"
-          aria-label="Text input"
-          autofocus
-          autocomplete="off"
-          placeholder="Guess"
-          id="userGuess"
-        />
-        <button
-          class="btn btn-outline-secondary"
-          type="button"
-          id="submitGuess"
-        >
-          Guess
-        </button>
-      </div>
-    </div>
+
     <div class="container container-lg" id="winText"></div>
 
     <div class="container container-lg wikiHolder">
-      <RedactleArticle />
+      <RedactleArticle :guess="this.guess"/>
     </div>
 
-    <div
-      class="modal fade"
-      id="infoModal"
-      tabindex="-1"
-      aria-labelledby="infoModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content text-dark">
-          <div class="modal-header">
-            <h5 class="modal-title" id="infoModalLabel">
-              Welcome to Redactle!
-            </h5>
-            <button
-              type="button"
-              class="btn-close closeInfo"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <p>
-              Redactle is a daily browser game where the user tries to determine
-              the subject of a random obfuscated Wikipedia article, chosen from
-              <a
-                href="https://en.wikipedia.org/wiki/Wikipedia:Vital_articles/Level/4"
-                target="_blank"
-              >
-                Wikipedia's 10,000 Vital Articles (Level 4).
-              </a>
-            </p>
-            <p>
-              A new puzzle will be available every day at 11:00 AM CDT (16:00
-              UTC).
-            </p>
-            <p>
-              Follow Redactle on Twitter
-              <a href="https://www.twitter.com/RedactleGame" target="_blank">
-                @RedactleGame
-              </a>
-              .
-            </p>
-            <p>
-              Created by
-              <a href="https://www.twitter.com/jhntrnr" target="_blank">
-                John Turner
-              </a>
-            </p>
-            <p id="yesterday"></p>
-            <h5>How to Play</h5>
-            <ul>
-              <li>
-                Type a word into the input box and press Enter or the Guess
-                button.
-              </li>
-              <li>
-                All occurrences of that word will become unredacted in the
-                article body.
-              </li>
-              <li>To win, figure out the title or subject of the article.</li>
-            </ul>
-            <h5>Tips and Quirks</h5>
-            <ul>
-              <li>
-                Each guess must be one word only (Guessing multiple words at a
-                time will not work).
-              </li>
-              <li>
-                <i>Most</i>
-                Punctuation is automatically revealed in the article page. Some
-                punctuation occasionally escapes Redactle's filter and becomes
-                redacted.
-              </li>
-              <li>
-                Guesses are case
-                <i>insensitive</i>
-                , and letters with diacritics (é, ü, etc) are considered to not
-                have those diacritics.
-              </li>
-              <li>
-                Shift+Enter will attempt to automatically pluralize or
-                singularize your guess. There are certain edge cases (e.g.
-                guessing a nonsense word like "asdf") where this will submit
-                nonsense guesses.
-              </li>
-              <li>
-                You will likely encounter some formatting and punctuation
-                quirks. These are a result of stripping away certain characters
-                and elements present in the original Wikipedia article that
-                don't play nicely with Redactle.
-              </li>
-              <li>
-                Many common words are automatically revealed for your
-                convenience. The list includes most English prepositions and
-                articles. Guessing these words does not count toward your score.
-              </li>
-              <li>Check the Settings menu for configuration options.</li>
-            </ul>
-            <h5>Does Redactle collect any user data?</h5>
-            <p>
-              In order to provide global performance stats, Redactle makes note
-              of a user's performance on a given puzzle. The data collected is
-              limited to the user's score and accuracy, and is anonymized.
-            </p>
-            <p>
-              Redactle does not collect any information regarding a user's
-              actual guesses.
-            </p>
-            <p>
-              For more information, view Redactle's
-              <a href="privacy.html">Privacy Policy.</a>
-            </p>
-            <p class="text-secondary">Version 1.0</p>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary closeInfo"
-              data-bs-dismiss="modal"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      </div>
+    <div class="bg-dark fixed-bottom">
+      <RedactleInput @update="inputUpdated"/>
     </div>
-
-    <div
-      class="modal fade"
-      id="settingsModal"
-      tabindex="-1"
-      aria-labelledby="settingsModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content text-dark">
-          <div class="modal-header">
-            <h5 class="modal-title" id="settingsModalLabel">Settings</h5>
-            <button
-              type="button"
-              class="btn-close closeSettings"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <div>
-              <div>
-                <label>
-                  <!-- <input name="checkbox" type="checkbox" id="hideZero" class="configCheck"> Hide Guesses with 0 Hits</input><br><br> -->
-                </label>
-              </div>
-              <div>
-                <label>
-                  <!-- <input name="checkbox" type="checkbox" id="autoPlural" class="configCheck"> Attempt to automatically pluralize and singularize guesses. There are certain edge cases (e.g. guessing a nonsense word like "asdf") where this will submit nonsense guesses.</input><br><br> -->
-                </label>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary closeSettings"
-              data-bs-dismiss="modal"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div
-      class="modal fade"
-      id="statsModal"
-      tabindex="-1"
-      aria-labelledby="statsModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content text-dark">
-          <div class="modal-header">
-            <h5 class="modal-title" id="statsModalLabel">Personal Stats</h5>
-            <button
-              type="button"
-              class="btn-close closeStats"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <div id="statsHolder">
-              <table class="table table-dark" id="statsTable">
-                <tbody>
-                  <tr>
-                    <th class="statHeadnum">#</th>
-                    <th class="statHeadart">Article</th>
-                    <th class="statHeadguess">Guesses</th>
-                    <th class="statHeadacc">Accuracy</th>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary closeStats"
-              data-bs-dismiss="modal"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+    
   </body>
 </template>
 

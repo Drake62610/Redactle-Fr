@@ -3,6 +3,9 @@ import axios from 'axios'
 import { commonWords } from '@/assets/commonWords'
 
 export default {
+  props: {
+    guess: String,
+  },
   data() {
     return {
       text: JSON,
@@ -10,12 +13,23 @@ export default {
       cleanHtml: new Document(),
       cipheredHtml: new Document(),
       articleName: '',
-      baffled: new Array<string[]>(),
+      baffled: new Array<{txt: string, e: Element}>(), 
     }
+  },
+  watch: {
+    guess(value) {
+      if (this.baffled) {
+        this.baffled.filter((baffle) => {
+            return baffle.txt === value;
+          }).forEach((matchGuess) => {
+            matchGuess.e.innerHTML = value;
+          })
+      }
+    },
   },
   async created() {
     try {
-      this.articleName = 'Uli_Windisch'
+      this.articleName = 'Paris'
       await axios
         .get<{ parse: { text: string } }>(
           `https://fr.wikipedia.org/w/api.php?action=parse&format=json&page=${this.articleName}&prop=text&formatversion=2&origin=*`,
@@ -38,15 +52,6 @@ export default {
           this.cleanHtml.querySelectorAll('small').forEach((e) => {
             e.replaceWith(...e.childNodes)
           })
-          // Remove redirects
-          // var redirecting = document.getElementsByClassName('redirectMsg')
-          // if (redirecting.length > 0) {
-          //   var redirURL = $(
-          //     '.redirectText',
-          //   )[0].firstChild.firstChild.innerHTML.replace(/ /g, '_')
-          //   conting = false
-          //   fetchData(!conting, redirURL)
-          // }
 
           //Remove References
           let seeAlso: (ParentNode | null | undefined)[] = []
@@ -74,12 +79,14 @@ export default {
 
           seeAlso.forEach((seeing) => {
             var e = this.cleanHtml.getElementsByClassName('mw-parser-output')
-            let alsoIndex = Array.prototype.indexOf.call(
-              seeing?.parentNode?.children,
-              seeing,
-            )
-            for (var i = alsoIndex; i < e[0].children.length; i++) {
-              e[0].removeChild(e[0].children[i])
+            if (seeing?.parentNode?.children) {
+              let alsoIndex = Array.prototype.indexOf.call(
+                seeing?.parentNode?.children,
+                seeing,
+              )
+              for (var i = alsoIndex; i < e[0].children.length; i++) {
+                e[0].removeChild(e[0].children[i])
+              }
             }
           })
 
@@ -169,7 +176,6 @@ export default {
           this.cleanHtml
             .querySelectorAll('p, blockquote, h1, h2, table, li, i, cite, span')
             .forEach((e) => {
-              console.log(e)
               e.innerHTML = e.innerHTML.replace(
                 /([\.,:()\[\]?!;`\~\-\u2013\—&*"])/g,
                 '<span class="punctuation">$1</span>',
@@ -214,29 +220,19 @@ export default {
           this.cleanHtml.querySelectorAll('*:empty, style').forEach((e) => {
             e.remove()
           })
-          this.cleanHtml
-            .querySelectorAll(
-              'span.innertxt',
-            )
-            .forEach((e) => {
-                console.log(e)
+          this.cleanHtml.querySelectorAll('span.innertxt').forEach((e) => {
+            const txt = e.innerHTML
+              .normalize('NFD')
+              .replace(/[\u0300-\u036f]/g, '')
+              .toLowerCase()
+            if (!commonWords.includes(txt) && e.firstElementChild === null) {
+              e.innerHTML = '█'.repeat(e.innerHTML.length)
 
-              const txt = e.innerHTML
-                .normalize('NFD')
-                .replace(/[\u0300-\u036f]/g, '')
-                .toLowerCase()
-              if (!commonWords.includes(txt) && e.firstElementChild === null) {
-                console.log(e.innerHTML);
-                e.innerHTML = "█".repeat(e.innerHTML.length);
-                console.log(e.innerHTML);
+              this.baffled.push({txt, e})
+            }
+          })
 
-                // e.classList.toggle('baffled')
-                // let b = baffle(e).once().set({
-                //   characters: 'abcd',
-                // })
-                // this.baffled.push([txt, b])
-              }
-            })
+          // console.log(this.baffled[0]);
 
           // if (guessedWords.length > 0) {
           //   for (var i = 0; i < guessedWords.length; i++) {
