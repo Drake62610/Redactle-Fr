@@ -9,15 +9,19 @@ export default defineComponent({
   name: 'RedactleInterface',
   data() {
     return {
-      guess: ""
-    };
+      guess: '',
+      guesses: new Array<{ guess: string; count: number }>(),
+    }
   },
   methods: {
     inputUpdated(event: string) {
-      this.guess = event;
+      this.guess = event
+    },
+    handleGuesses(event: { guess: string; count: number }) {
+      this.guesses.push(event)
     },
   },
-});
+})
 </script>
 
 <template>
@@ -47,20 +51,25 @@ export default defineComponent({
             <th scope="col">Hits</th>
           </tr>
         </thead>
-        <tbody id="guessLogBody"></tbody>
+        <template v-if="guesses.length">
+          <tbody v-for="(item, index) in guesses" :key="item.guess">
+            <td># {{index + 1}}</td>
+            <td>{{ item.guess }}</td>
+            <td>{{ item.count }}</td>
+          </tbody>
+        </template>
       </table>
     </nav>
 
     <div class="container container-lg" id="winText"></div>
 
     <div class="container container-lg wikiHolder">
-      <RedactleArticle :guess="guess"/>
+      <RedactleArticle @update="handleGuesses" :guess="guess" />
     </div>
 
     <div class="bg-dark fixed-bottom">
-      <RedactleInput @update="inputUpdated"/>
+      <RedactleInput @update="inputUpdated" />
     </div>
-    
   </body>
 </template>
 

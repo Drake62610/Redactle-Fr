@@ -1,8 +1,5 @@
 <template>
   <div class="input-group m-3" id="inGrp">
-    <!-- <button class="btn btn-outline-secondary" type="button" id="backToTop">
-      &#9650; Top
-    </button> -->
     <input
       type="text"
       class="form-text-lg"
@@ -11,6 +8,7 @@
       autocomplete="off"
       placeholder="Guess"
       v-model="inputField"
+      @keyup.enter="updateInput()"
     />
     <button
       @click="updateInput()"

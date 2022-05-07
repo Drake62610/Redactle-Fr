@@ -14,23 +14,30 @@ export default defineComponent({
       cleanHtml: new Document(),
       cipheredHtml: new Document(),
       articleName: '',
-      baffled: new Array<{txt: string, e: Element}>(), 
+      baffled: new Array<{ txt: string; e: Element }>(),
     }
   },
   watch: {
     guess(value) {
+      let count = 0
       if (this.baffled) {
-        this.baffled.filter((baffle) => {
-            return baffle.txt === value;
-          }).forEach((matchGuess) => {
-            matchGuess.e.innerHTML = value;
+        this.baffled
+          .filter((baffle) => {
+            return baffle.txt === value
           })
+          .forEach((matchGuess) => {
+            matchGuess.e.innerHTML = value
+            count++
+          })
+        console.log('emit event');
+        console.log({ guess: value, count });
+        this.$emit('update', { guess: value, count });
       }
     },
   },
   async created() {
     try {
-      this.articleName = 'Célestis'
+      this.articleName = 'Yakuza'
       await axios
         .get<{ parse: { text: string } }>(
           `https://fr.wikipedia.org/w/api.php?action=parse&format=json&page=${this.articleName}&prop=text&formatversion=2&origin=*`,
@@ -229,7 +236,7 @@ export default defineComponent({
             if (!commonWords.includes(txt) && e.firstElementChild === null) {
               e.innerHTML = '█'.repeat(e.innerHTML.length)
 
-              this.baffled.push({txt, e})
+              this.baffled.push({ txt, e })
             }
           })
 
@@ -270,7 +277,7 @@ export default defineComponent({
           // }
 
           // wikiHolder.style.display = 'flex'
-          this.isReady = true;
+          this.isReady = true
         })
     } catch (error) {
       console.log(error)
