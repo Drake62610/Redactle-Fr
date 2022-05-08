@@ -24,6 +24,7 @@ export default defineComponent({
       this.guess = event;
     },
     handleGuesses(event: Guess): void {
+      console.log(event);
       this.guesses.push(event);
       this.focusWord(event);
     },

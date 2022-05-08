@@ -22,6 +22,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { commonWords } from '@/assets/commonWords'
 
 export default defineComponent({
   name: 'RedactleInput',
@@ -32,9 +33,11 @@ export default defineComponent({
   },
   methods: {
     updateInput() {
-      this.$emit("update", this.inputField);
-      this.inputField = '';
+      if (!commonWords.includes(this.inputField)) {
+        this.$emit('update', this.inputField)
+      }
+      this.inputField = ''
     },
   },
-});
+})
 </script>
