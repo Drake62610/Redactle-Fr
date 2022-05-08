@@ -13,7 +13,11 @@ export default defineComponent({
       isReady: false,
       cleanHtml: new Document(),
       articleName: '',
-      baffled: new Array<{ formatedString: string; e: Element; original: string }>(),
+      baffled: new Array<{
+        formatedString: string
+        e: Element
+        original: string
+      }>(),
     }
   },
   watch: {
@@ -25,16 +29,16 @@ export default defineComponent({
             return baffle.formatedString === value
           })
           .forEach((matchGuess) => {
-            matchGuess.e.innerHTML = matchGuess.original;
+            matchGuess.e.innerHTML = matchGuess.original
             count++
-          });
+          })
         this.$emit('update', { guess: value, count })
       }
     },
   },
   async created() {
     try {
-      this.articleName = 'Yakuza'
+      this.articleName = 'Manga'
       await axios
         .get<{ parse: { text: string } }>(
           `https://fr.wikipedia.org/w/api.php?action=parse&format=json&page=${this.articleName}&prop=text&formatversion=2&origin=*`,
@@ -59,70 +63,82 @@ export default defineComponent({
           })
 
           //Remove References
-          let seeAlso: (ParentNode | null | undefined)[] = []
-          if (this.cleanHtml.getElementById('Liens_externes')?.parentNode) {
-            seeAlso.push(
-              this.cleanHtml.getElementById('Liens_externes')?.parentNode,
-            )
-          }
+          // let seeAlso: (ParentNode | null | undefined)[] = []
+          // if (this.cleanHtml.getElementById('Liens_externes')?.parentNode) {
+          //   seeAlso.push(
+          //     this.cleanHtml.getElementById('Liens_externes')?.parentNode,
+          //   )
+          // }
 
-          if (
-            this.cleanHtml.getElementById('Notes_et_r.C3.A9f.C3.A9rences')
-              ?.parentNode
-          ) {
-            seeAlso.push(
-              this.cleanHtml.getElementById('Notes_et_r.C3.A9f.C3.A9rences')
-                ?.parentNode,
-            )
-          }
+          // if (
+          //   this.cleanHtml.getElementById('Notes_et_r.C3.A9f.C3.A9rences')
+          //     ?.parentNode
+          // ) {
+          //   seeAlso.push(
+          //     this.cleanHtml.getElementById('Notes_et_r.C3.A9f.C3.A9rences')
+          //       ?.parentNode,
+          //   )
+          // }
 
-          if (this.cleanHtml.getElementById('Bibliographie')?.parentNode) {
-            seeAlso.push(
-              this.cleanHtml.getElementById('Bibliographie')?.parentNode,
-            )
-          }
+          // if (this.cleanHtml.getElementById('Bibliographie')?.parentNode) {
+          //   seeAlso.push(
+          //     this.cleanHtml.getElementById('Bibliographie')?.parentNode,
+          //   )
+          // }
 
-          seeAlso.forEach((seeing) => {
-            var e = this.cleanHtml.getElementsByClassName('mw-parser-output')
-            if (seeing?.parentNode?.children) {
-              let alsoIndex = Array.prototype.indexOf.call(
-                seeing?.parentNode?.children,
-                seeing,
-              )
-              for (var i = alsoIndex; i < e[0].children.length; i++) {
-                e[0].removeChild(e[0].children[i])
-              }
+          // seeAlso.forEach((seeing) => {
+          //   var e = this.cleanHtml.getElementsByClassName('mw-parser-output')
+          //   if (seeing?.parentNode?.children) {
+          //     let alsoIndex = Array.prototype.indexOf.call(
+          //       seeing?.parentNode?.children,
+          //       seeing,
+          //     )
+          //     for (var i = alsoIndex; i < e[0].children.length; i++) {
+          //       e[0].removeChild(e[0].children[i])
+          //     }
+          //   }
+          // })
+
+          this.cleanHtml.querySelectorAll('time').forEach((e) => {
+            // e.innerHTML = ""
+            if (e.getAttribute('datetime') === null) {
+              console.log(e.parentNode?.firstChild)
+            }
+            const replace = new Date(
+              (e.getAttribute('datetime')
+                ? e.getAttribute('datetime')
+                : '') as string,
+            )
+            var newTag = document.createTextNode(
+              replace.toLocaleDateString('fr-FR'),
+            )
+            if (e.firstChild) {
+              e.parentNode?.replaceChild(newTag, e)
             }
           })
 
           // Remove unused elements
           this.cleanHtml
             .querySelectorAll(
-              "#bandeau-portail, [rel='mw-deduplicated-inline-style'], [title='Name at birth'], [aria-labelledby='micro-periodic-table-title'], .barbox, .wikitable, .clade, .Expand_section, .nowrap, .IPA, .thumb, .mw-empty-elt, .mw-editsection, .nounderlines, .nomobile, .searchaux, #toc, .sidebar, .sistersitebox, .noexcerpt, #External_links, #Further_reading, .hatnote, .haudio, .portalbox, .mw-references-wrap, .infobox, .unsolved, .navbox, .metadata, .refbegin, .reflist, .mw-stack, #Notes, #References, .reference, .quotebox, .collapsible, .uncollapsed, .mw-collapsible, .mw-made-collapsible, .mbox-small, .mbox, #coordinates, .succession-box, .noprint, .mwe-math-element, .cs1-ws-icon",
+              ".nowrap, #bandeau-portail, [rel='mw-deduplicated-inline-style'], [title='Name at birth'], [aria-labelledby='micro-periodic-table-title'], .barbox, .wikitable, .clade, .Expand_section, .IPA, .thumb, .mw-empty-elt, .mw-editsection, .nounderlines, .nomobile, .searchaux, #toc, .sidebar, .sistersitebox, .noexcerpt, #External_links, #Further_reading, .hatnote, .haudio, .portalbox, .mw-references-wrap, .infobox, .unsolved, .navbox, .metadata, .refbegin, .reflist, .mw-stack, #Notes, #References, .reference, .quotebox, .collapsible, .uncollapsed, .mw-collapsible, .mw-made-collapsible, .mbox-small, .mbox, #coordinates, .succession-box, .noprint, .mwe-math-element, .cs1-ws-icon",
             )
             .forEach((e) => {
               e.remove()
             })
 
-          // Handle bold
-          var b = this.cleanHtml.getElementsByTagName('b')
-          while (b.length) {
-            var parent = b[0].parentNode
-            while (b[0].firstChild) {
-              parent?.insertBefore(b[0].firstChild, b[0])
-            }
-            parent?.removeChild(b[0])
-          }
-
-          // // Handle links
-          var a = this.cleanHtml.getElementsByTagName('a')
-          while (a.length) {
-            var parent = a[0].parentNode
-            while (a[0].firstChild) {
-              parent?.insertBefore(a[0].firstChild, a[0])
-            }
-            parent?.removeChild(a[0])
-          }
+          // Handle anchors
+          this.emptyHTMLCollection(
+            this.cleanHtml.getElementsByTagName('a')
+          );
+          this.emptyHTMLCollection(
+            this.cleanHtml.getElementsByTagName('i')
+          );
+          this.emptyHTMLCollection(
+            this.cleanHtml.getElementsByTagName('b')
+          );
+          this.emptyHTMLCollection(
+            this.cleanHtml.getElementsByTagName('abbr')
+          );
 
           // // Handle quotes
           var bq = this.cleanHtml.getElementsByTagName('blockquote')
@@ -179,34 +195,14 @@ export default defineComponent({
             e.removeAttribute('style')
           })
           this.cleanHtml
-            .querySelectorAll('p, blockquote, h1, h2, table, li, i, cite, span')
+            .querySelectorAll(
+              'p, blockquote, h1, h2, h3, table, li, i, cite, span',
+            )
             .forEach((e) => {
               e.innerHTML = e.innerHTML.replace(
-                /([\.,:()\[\]?!;`\~\-\u2013\—&*"'])/g,
+                /([\.,:()\[\]?!;`\~\-\u2013\—&*"'’/])/g,
                 '<span class="punctuation">$1</span>',
               )
-              // e.children.forEach((child) => {
-
-              // }
-              // console.log(e)
-              // console.log(.nodeType);
-              // filter((node) => {
-              //   console.log(node)
-              //   console.log(node.nodeName)
-              //   console.log(node.nodeType)
-              //   return node.nodeType === 3
-              // }
-              // )
-              // .forEach((filteredNode) => {
-              //   if (filteredNode.textContent) {
-              //     var replaced = filteredNode.textContent.replace(
-              //       /([\.,:()\[\]?!;`\~\-\u2013\—&*"])/g,
-              //       '<span class="punctuation">$1</span>',
-              //     )
-              //     filteredNode.replaceWith(replaced)
-              //     console.log(replaced)
-              //   }
-              // })
             }),
             (this.cleanHtml.body.innerHTML = this.cleanHtml.body.innerHTML
               .replace(/&lt;/g, '<')
@@ -222,10 +218,11 @@ export default defineComponent({
               )
               .replace(/(<!--.*?-->)|(<!--[\S\s]+?-->)|(<!--[\S\s]*?$)/g, ''))
 
-          this.cleanHtml.querySelectorAll('span.innertxt').forEach((e) => {
-            e.innerHTML = e.innerHTML
-              .replace(/['"]+/g, '<span class="punctuation">\'</span>');
-          });
+          // this.cleanHtml.querySelectorAll('span.innertxt').forEach((e) => {
+          //   console.log(e.innerHTML);
+          //   e.innerHTML = e.innerHTML
+          //     .replace(/['"]+/g, '</span><span class="punctuation">\'</span><span class="innertxt"');
+          // });
           this.cleanHtml.querySelectorAll('*:empty, style').forEach((e) => {
             e.remove()
           })
@@ -235,55 +232,31 @@ export default defineComponent({
               .replace(/[\u0300-\u036f]/g, '')
               .toLowerCase()
             if (!commonWords.includes(txt) && e.firstElementChild === null) {
-              // e.innerHTML = `${e.innerHTML} | `
-              this.baffled.push({ formatedString: txt, e, original: e.innerHTML })
+              this.baffled.push({
+                formatedString: txt,
+                e,
+                original: e.innerHTML,
+              })
               e.innerHTML = '█'.repeat(e.innerHTML.length)
-
             }
           });
-
-          // console.log(this.baffled[0]);
-
-          // if (guessedWords.length > 0) {
-          //   for (var i = 0; i < guessedWords.length; i++) {
-          //     guessCounter += 1
-          //     PerformGuess(guessedWords[i][0], true)
-          //   }
-          // }
-
-          // if (pluralizing) {
-          //   document.getElementById('autoPlural').checked = true
-          // } else {
-          //   document.getElementById('autoPlural').checked = false
-          // }
-
-          // if (hidingZero) {
-          //   document.getElementById('hideZero').checked = true
-          //   HideZero()
-          // } else {
-          //   document.getElementById('hideZero').checked = false
-          //   ShowZero()
-          // }
-
-          // if (redactleIndex > 0) {
-          //   document.getElementById(
-          //     'yesterday',
-          //   ).innerHTML = `The answer to yesterday's Redactle was: ${atob(
-          //     yesterday,
-          //   )
-          //     .replace(/ *\([^)]*\) */g, '')
-          //     .normalize('NFD')
-          //     .replace(/[\u0300-\u036f]/g, '')
-          //     .replace(/_/g, ' ')
-          //     .toLowerCase()}`
-          // }
-
-          // wikiHolder.style.display = 'flex'
           this.isReady = true
         })
     } catch (error) {
       console.log(error)
     }
+  },
+  methods: {
+    emptyHTMLCollection(e: HTMLCollectionOf<HTMLElement>) {
+      while (e.length) {
+        let parent = e[0].parentNode
+        while (e[0].firstChild) {
+          parent?.insertBefore(e[0].firstChild, e[0])
+        }
+        parent?.removeChild(e[0])
+      }
+      return
+    },
   },
 })
 </script>

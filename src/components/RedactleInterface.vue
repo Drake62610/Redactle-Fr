@@ -32,8 +32,6 @@ export default defineComponent({
         return;
       }
       this.focus = input.guess;
-      console.log(input);
-      console.log(this.focus);
     },
   },
 })
