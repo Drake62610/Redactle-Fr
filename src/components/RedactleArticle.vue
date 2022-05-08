@@ -13,7 +13,7 @@ export default defineComponent({
       isReady: false,
       cleanHtml: new Document(),
       articleName: '',
-      baffled: new Array<{ txt: string; e: Element }>(),
+      baffled: new Array<{ formatedString: string; e: Element; original: string }>(),
     }
   },
   watch: {
@@ -22,10 +22,10 @@ export default defineComponent({
       if (this.baffled) {
         this.baffled
           .filter((baffle) => {
-            return baffle.txt === value
+            return baffle.formatedString === value
           })
           .forEach((matchGuess) => {
-            matchGuess.e.innerHTML = value
+            matchGuess.e.innerHTML = matchGuess.original;
             count++
           })
         console.log('emit event')
@@ -237,9 +237,10 @@ export default defineComponent({
               .replace(/[\u0300-\u036f]/g, '')
               .toLowerCase()
             if (!commonWords.includes(txt) && e.firstElementChild === null) {
-              e.innerHTML = '█'.repeat(e.innerHTML.length)
               // e.innerHTML = `${e.innerHTML} | `
-              this.baffled.push({ txt, e })
+              this.baffled.push({ formatedString: txt, e, original: e.innerHTML })
+              e.innerHTML = '█'.repeat(e.innerHTML.length)
+
             }
           });
 
