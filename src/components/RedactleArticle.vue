@@ -25,7 +25,7 @@ export default defineComponent({
   watch: {
     guess(value) {
       let count = 0
-
+      const hasWon = value === this.articleName
       if (this.baffled) {
         // Remove Highlight
         if (this.currentHighlighted) {
@@ -42,11 +42,13 @@ export default defineComponent({
         // Reveal word
         this.baffled
           .filter((baffle) => {
-            return baffle.formatedString === value
+            return baffle.formatedString === value || hasWon
           })
           .forEach((matchGuess) => {
             matchGuess.e.innerHTML = matchGuess.original
-            matchGuess.e.classList.add('highlighted')
+            if (!hasWon) {
+              matchGuess.e.classList.add('highlighted')
+            }
             count++
           })
         // [...document.getElementsByClassName('innerTxt')]
@@ -277,6 +279,12 @@ export default defineComponent({
               e.innerHTML = '█'.repeat(e.innerHTML.length)
             }
           })
+
+          // Format article name /!\ works only with one-word article name
+          this.articleName = this.articleName
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .toLowerCase()
           this.isReady = true
         })
     } catch (error) {
