@@ -33,8 +33,11 @@ export default defineComponent({
   },
   methods: {
     updateInput() {
-      if (!commonWords.includes(this.inputField)) {
-        this.$emit('update', this.inputField)
+      const formatedInput = this.inputField.normalize('NFD')
+              .replace(/[\u0300-\u036f]/g, '')
+              .toLowerCase()
+      if (!commonWords.includes(formatedInput)) {
+        this.$emit('update', formatedInput)
       }
       this.inputField = ''
     },

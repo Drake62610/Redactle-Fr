@@ -83,7 +83,7 @@ export default defineComponent({
     </nav>
 
     <div class="container container-lg wikiHolder">
-      <RedactleArticle @update="handleGuesses" :guess="guess" />
+      <RedactleArticle @update="handleGuesses" :guess="guess" :focus="focus"/>
     </div>
 
     <div class="bg-dark fixed-bottom">

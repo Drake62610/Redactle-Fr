@@ -35,7 +35,7 @@ export default defineComponent({
             })
             .forEach((matchGuess) => {
               matchGuess.e.classList.remove('highlighted')
-            });
+            })
         }
         this.currentHighlighted = value
 
@@ -48,7 +48,7 @@ export default defineComponent({
             matchGuess.e.innerHTML = matchGuess.original
             matchGuess.e.classList.add('highlighted')
             count++
-          });
+          })
         // [...document.getElementsByClassName('innerTxt')]
         // .forEach((element) => {
         //   console.log(element);
@@ -59,11 +59,26 @@ export default defineComponent({
     },
     focus(value) {
       if (this.baffled) {
+        // Remove Highlight
+        if (this.currentHighlighted) {
+          this.baffled
+            .filter((baffle) => {
+              return baffle.formatedString === this.currentHighlighted
+            })
+            .forEach((matchGuess) => {
+              matchGuess.e.classList.remove('highlighted')
+            })
+        }
+        this.currentHighlighted = value
+
+        // Highlight word
         this.baffled
           .filter((baffle) => {
-            return baffle.formatedString === this.guess
-          })[0]
-          .e.scroll()
+            return baffle.formatedString === value
+          })
+          .forEach((matchGuess) => {
+            matchGuess.e.classList.add('highlighted')
+          })
       }
     },
   },
@@ -259,7 +274,7 @@ export default defineComponent({
                 e,
                 original: e.innerHTML,
               })
-              e.innerHTML = '█'.repeat(e.innerHTML.length);
+              e.innerHTML = '█'.repeat(e.innerHTML.length)
             }
           })
           this.isReady = true
