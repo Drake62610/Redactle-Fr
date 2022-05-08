@@ -12,7 +12,6 @@ export default defineComponent({
       text: JSON,
       isReady: false,
       cleanHtml: new Document(),
-      cipheredHtml: new Document(),
       articleName: '',
       baffled: new Array<{ txt: string; e: Element }>(),
     }
@@ -29,15 +28,15 @@ export default defineComponent({
             matchGuess.e.innerHTML = value
             count++
           })
-        console.log('emit event');
-        console.log({ guess: value, count });
-        this.$emit('update', { guess: value, count });
+        console.log('emit event')
+        console.log({ guess: value, count })
+        this.$emit('update', { guess: value, count })
       }
     },
   },
   async created() {
     try {
-      this.articleName = 'Yakuza'
+      this.articleName = 'Small_(journal)'
       await axios
         .get<{ parse: { text: string } }>(
           `https://fr.wikipedia.org/w/api.php?action=parse&format=json&page=${this.articleName}&prop=text&formatversion=2&origin=*`,
@@ -185,7 +184,7 @@ export default defineComponent({
             .querySelectorAll('p, blockquote, h1, h2, table, li, i, cite, span')
             .forEach((e) => {
               e.innerHTML = e.innerHTML.replace(
-                /([\.,:()\[\]?!;`\~\-\u2013\—&*"])/g,
+                /([\.,:()\[\]?!;`\~\-\u2013\—&*"'])/g,
                 '<span class="punctuation">$1</span>',
               )
               // e.children.forEach((child) => {
@@ -225,6 +224,10 @@ export default defineComponent({
               )
               .replace(/(<!--.*?-->)|(<!--[\S\s]+?-->)|(<!--[\S\s]*?$)/g, ''))
 
+          this.cleanHtml.querySelectorAll('span.innertxt').forEach((e) => {
+            e.innerHTML = e.innerHTML
+              .replace(/['"]+/g, '<span class="punctuation">\'</span>');
+          });
           this.cleanHtml.querySelectorAll('*:empty, style').forEach((e) => {
             e.remove()
           })
@@ -235,10 +238,10 @@ export default defineComponent({
               .toLowerCase()
             if (!commonWords.includes(txt) && e.firstElementChild === null) {
               e.innerHTML = '█'.repeat(e.innerHTML.length)
-
+              // e.innerHTML = `${e.innerHTML} | `
               this.baffled.push({ txt, e })
             }
-          })
+          });
 
           // console.log(this.baffled[0]);
 
