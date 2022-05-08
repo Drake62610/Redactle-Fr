@@ -14,6 +14,7 @@ export default defineComponent({
       isReady: false,
       cleanHtml: new Document(),
       articleName: '',
+      currentHighlighted: '',
       baffled: new Array<{
         formatedString: string
         e: Element
@@ -24,17 +25,35 @@ export default defineComponent({
   watch: {
     guess(value) {
       let count = 0
+
       if (this.baffled) {
+        // Remove Highlight
+        if (this.currentHighlighted) {
+          this.baffled
+            .filter((baffle) => {
+              return baffle.formatedString === this.currentHighlighted
+            })
+            .forEach((matchGuess) => {
+              matchGuess.e.classList.remove('highlighted')
+            })
+        }
+        this.currentHighlighted = value
+
+        // Reveal word
         this.baffled
           .filter((baffle) => {
             return baffle.formatedString === value
           })
           .forEach((matchGuess) => {
             matchGuess.e.innerHTML = matchGuess.original
+            matchGuess.e.classList.add('highlighted')
             count++
-          });
-
-        // this.baffled[50].e.scroll(0, 1000);
+          })
+        // [...document.getElementsByClassName('innerTxt')]
+        // .forEach((element) => {
+        //   console.log(element);
+        //   element.classList.add("highlighted");
+        // })
         this.$emit('update', { guess: value, count })
       }
     },
@@ -240,7 +259,7 @@ export default defineComponent({
                 e,
                 original: e.innerHTML,
               })
-              e.innerHTML = '█'.repeat(e.innerHTML.length)
+              e.innerHTML = '█'.repeat(e.innerHTML.length);
             }
           })
           this.isReady = true
@@ -272,4 +291,13 @@ export default defineComponent({
   ></div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.mw-parser-output >>> .highlighted {
+  background-color: #00585e !important;
+}
+
+.mw-parser-output >>> .superHighlighted {
+  background-color: #00becc !important;
+  color: #0f0f0f;
+}
+</style>

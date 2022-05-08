@@ -141,13 +141,7 @@ td {
   overflow-x: auto;
   overflow-wrap: break-word;
 }
-.highlighted {
-  background-color: #00585e !important;
-}
-.superHighlighted {
-  background-color: #00becc !important;
-  color: #0f0f0f;
-}
+
 #inputHolder {
   position: fixed;
   bottom: 0;
