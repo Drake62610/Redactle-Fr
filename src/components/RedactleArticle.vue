@@ -90,7 +90,7 @@ export default defineComponent({
   },
   async created() {
     try {
-      this.articleName = 'Manga'
+      this.articleName = 'Streaming'
       await axios
         .get<{ parse: { text: string } }>(
           `https://fr.wikipedia.org/w/api.php?action=parse&format=json&page=${this.articleName}&prop=text&formatversion=2&origin=*`,
@@ -182,6 +182,7 @@ export default defineComponent({
           this.emptyHTMLCollection(this.cleanHtml.getElementsByTagName('i'))
           this.emptyHTMLCollection(this.cleanHtml.getElementsByTagName('b'))
           this.emptyHTMLCollection(this.cleanHtml.getElementsByTagName('abbr'))
+          this.emptyHTMLCollection(this.cleanHtml.getElementsByTagName('sub'))
 
           // // Handle quotes
           var bq = this.cleanHtml.getElementsByTagName('blockquote')
