@@ -35,7 +35,7 @@ export default defineComponent({
             })
             .forEach((matchGuess) => {
               matchGuess.e.classList.remove('highlighted')
-            })
+            });
         }
         this.currentHighlighted = value
 
@@ -48,7 +48,7 @@ export default defineComponent({
             matchGuess.e.innerHTML = matchGuess.original
             matchGuess.e.classList.add('highlighted')
             count++
-          })
+          });
         // [...document.getElementsByClassName('innerTxt')]
         // .forEach((element) => {
         //   console.log(element);
