@@ -5,20 +5,35 @@ import { defineComponent } from 'vue'
 </script>
 
 <script lang="ts">
+type Guess = {
+  guess: string
+  count: number
+}
+
 export default defineComponent({
   name: 'RedactleInterface',
   data() {
     return {
       guess: '',
-      guesses: new Array<{ guess: string; count: number }>(),
+      guesses: new Array<Guess>(),
+      focus: '',
     }
   },
   methods: {
-    inputUpdated(event: string) {
-      this.guess = event
+    inputUpdated(event: string): void {
+      this.guess = event;
     },
-    handleGuesses(event: { guess: string; count: number }) {
-      this.guesses.push(event)
+    handleGuesses(event: Guess): void {
+      this.guesses.push(event);
+      this.focusWord(event);
+    },
+    focusWord(input: Guess): void {
+      if (!input.count) {
+        return;
+      }
+      this.focus = input.guess;
+      console.log(input);
+      console.log(this.focus);
     },
   },
 })
@@ -52,10 +67,18 @@ export default defineComponent({
           </tr>
         </thead>
         <template v-if="guesses.length">
-          <tbody v-for="(item, index) in [...guesses].reverse()" :key="item.guess">
-            <td># {{guesses.length - index}}</td>
-            <td>{{ item.guess }}</td>
-            <td>{{ item.count }}</td>
+          <tbody
+            v-for="(item, index) in [...guesses].reverse()"
+            :key="item.guess"
+          >
+            <tr
+              :class="{ 'table-secondary': item.guess === focus }"
+              @click="focusWord(item)"
+            >
+              <td># {{ guesses.length - index }}</td>
+              <td>{{ item.guess }}</td>
+              <td>{{ item.count }}</td>
+            </tr>
           </tbody>
         </template>
       </table>

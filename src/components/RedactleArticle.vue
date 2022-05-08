@@ -27,16 +27,14 @@ export default defineComponent({
           .forEach((matchGuess) => {
             matchGuess.e.innerHTML = matchGuess.original;
             count++
-          })
-        console.log('emit event')
-        console.log({ guess: value, count })
+          });
         this.$emit('update', { guess: value, count })
       }
     },
   },
   async created() {
     try {
-      this.articleName = 'Small_(journal)'
+      this.articleName = 'Yakuza'
       await axios
         .get<{ parse: { text: string } }>(
           `https://fr.wikipedia.org/w/api.php?action=parse&format=json&page=${this.articleName}&prop=text&formatversion=2&origin=*`,
