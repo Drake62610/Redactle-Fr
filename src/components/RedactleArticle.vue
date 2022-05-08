@@ -6,6 +6,7 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   props: {
     guess: String,
+    focus: String,
   },
   data() {
     return {
@@ -31,8 +32,19 @@ export default defineComponent({
           .forEach((matchGuess) => {
             matchGuess.e.innerHTML = matchGuess.original
             count++
-          })
+          });
+
+        // this.baffled[50].e.scroll(0, 1000);
         this.$emit('update', { guess: value, count })
+      }
+    },
+    focus(value) {
+      if (this.baffled) {
+        this.baffled
+          .filter((baffle) => {
+            return baffle.formatedString === this.guess
+          })[0]
+          .e.scroll()
       }
     },
   },
@@ -100,10 +112,9 @@ export default defineComponent({
           // })
 
           this.cleanHtml.querySelectorAll('time').forEach((e) => {
-            // e.innerHTML = ""
-            if (e.getAttribute('datetime') === null) {
-              console.log(e.parentNode?.firstChild)
-            }
+            // if (e.getAttribute('datetime') === null) {
+            //   console.log(e.parentNode?.firstChild)
+            // }
             const replace = new Date(
               (e.getAttribute('datetime')
                 ? e.getAttribute('datetime')
@@ -127,18 +138,10 @@ export default defineComponent({
             })
 
           // Handle anchors
-          this.emptyHTMLCollection(
-            this.cleanHtml.getElementsByTagName('a')
-          );
-          this.emptyHTMLCollection(
-            this.cleanHtml.getElementsByTagName('i')
-          );
-          this.emptyHTMLCollection(
-            this.cleanHtml.getElementsByTagName('b')
-          );
-          this.emptyHTMLCollection(
-            this.cleanHtml.getElementsByTagName('abbr')
-          );
+          this.emptyHTMLCollection(this.cleanHtml.getElementsByTagName('a'))
+          this.emptyHTMLCollection(this.cleanHtml.getElementsByTagName('i'))
+          this.emptyHTMLCollection(this.cleanHtml.getElementsByTagName('b'))
+          this.emptyHTMLCollection(this.cleanHtml.getElementsByTagName('abbr'))
 
           // // Handle quotes
           var bq = this.cleanHtml.getElementsByTagName('blockquote')
@@ -239,7 +242,7 @@ export default defineComponent({
               })
               e.innerHTML = '█'.repeat(e.innerHTML.length)
             }
-          });
+          })
           this.isReady = true
         })
     } catch (error) {
