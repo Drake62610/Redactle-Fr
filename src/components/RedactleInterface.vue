@@ -52,16 +52,14 @@ export default defineComponent({
           </tr>
         </thead>
         <template v-if="guesses.length">
-          <tbody v-for="(item, index) in guesses" :key="item.guess">
-            <td># {{index + 1}}</td>
+          <tbody v-for="(item, index) in [...guesses].reverse()" :key="item.guess">
+            <td># {{guesses.length - index}}</td>
             <td>{{ item.guess }}</td>
             <td>{{ item.count }}</td>
           </tbody>
         </template>
       </table>
     </nav>
-
-    <div class="container container-lg" id="winText"></div>
 
     <div class="container container-lg wikiHolder">
       <RedactleArticle @update="handleGuesses" :guess="guess" />

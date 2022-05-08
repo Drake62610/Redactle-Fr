@@ -32,8 +32,8 @@ export default defineComponent({
   },
   methods: {
     updateInput() {
-      console.log(this.inputField);
       this.$emit("update", this.inputField);
+      this.inputField = '';
     },
   },
 });
