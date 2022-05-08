@@ -61,6 +61,10 @@ export default defineComponent({
     },
     focus(value) {
       if (this.baffled) {
+        if (value === this.articleName) {
+          return;
+        }
+
         // Remove Highlight
         if (this.currentHighlighted) {
           this.baffled
