@@ -24,39 +24,39 @@ export default defineComponent({
   },
   watch: {
     guess(value) {
-      let count = 0
+      let count = 0;
       const hasWon = value === this.articleName
       if (this.baffled) {
         // Remove Highlight
         if (this.currentHighlighted) {
           this.baffled
             .filter((baffle) => {
-              return baffle.formatedString === this.currentHighlighted
+              return baffle.formatedString === this.currentHighlighted;
             })
             .forEach((matchGuess) => {
-              matchGuess.e.classList.remove('highlighted')
+              matchGuess.e.classList.remove('highlighted');
             })
         }
-        this.currentHighlighted = value
+        this.currentHighlighted = value;
 
         // Reveal word
         this.baffled
           .filter((baffle) => {
-            return baffle.formatedString === value || hasWon
+            return baffle.formatedString === value || hasWon;
           })
           .forEach((matchGuess) => {
-            matchGuess.e.innerHTML = matchGuess.original
+            matchGuess.e.innerHTML = matchGuess.original;
             if (!hasWon) {
-              matchGuess.e.classList.add('highlighted')
+              matchGuess.e.classList.add('highlighted');
             }
-            count++
+            count++;
           })
         // [...document.getElementsByClassName('innerTxt')]
         // .forEach((element) => {
         //   console.log(element);
         //   element.classList.add("highlighted");
         // })
-        this.$emit('update', { guess: value, count })
+        this.$emit('update', { guess: value, count });
       }
     },
     focus(value) {
@@ -69,10 +69,10 @@ export default defineComponent({
         if (this.currentHighlighted) {
           this.baffled
             .filter((baffle) => {
-              return baffle.formatedString === this.currentHighlighted
+              return baffle.formatedString === this.currentHighlighted;
             })
             .forEach((matchGuess) => {
-              matchGuess.e.classList.remove('highlighted')
+              matchGuess.e.classList.remove('highlighted');
             })
         }
         this.currentHighlighted = value
@@ -90,7 +90,7 @@ export default defineComponent({
   },
   async created() {
     try {
-      this.articleName = 'Streaming'
+      this.articleName = 'Streaming';
       await axios
         .get<{ parse: { text: string } }>(
           `https://fr.wikipedia.org/w/api.php?action=parse&format=json&page=${this.articleName}&prop=text&formatversion=2&origin=*`,
@@ -114,14 +114,7 @@ export default defineComponent({
             e.replaceWith(...e.childNodes);
           });
 
-          //Remove References
-          // let seeAlso: (ParentNode | null | undefined)[] = []
-          // if (this.cleanHtml.getElementById('Liens_externes')?.parentNode) {
-          //   seeAlso.push(
-          //     this.cleanHtml.getElementById('Liens_externes')?.parentNode,
-          //   )
-          // }
-
+          //Remove References /!\ Very bad code
           const seeAlso = [];
           if (
             this.cleanHtml.getElementById('Voir_aussi')
@@ -133,11 +126,6 @@ export default defineComponent({
             );
           }
 
-          // if (this.cleanHtml.getElementById('Bibliographie')?.parentNode) {
-          //   seeAlso.push(
-          //     this.cleanHtml.getElementById('Bibliographie')?.parentNode,
-          //   )
-          // }
 
           seeAlso.forEach((seeing) => {
             var e = this.cleanHtml.getElementsByClassName('mw-parser-output');
@@ -282,7 +270,7 @@ export default defineComponent({
                 e,
                 original: e.innerHTML,
               });
-              // e.innerHTML = '█'.repeat(e.innerHTML.length);
+              e.innerHTML = '█'.repeat(e.innerHTML.length);
             }
           })
 
