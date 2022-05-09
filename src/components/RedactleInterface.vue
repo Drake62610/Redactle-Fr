@@ -18,6 +18,7 @@ export default defineComponent({
       guess: '',
       guesses: new Array<Guess>(),
       focus: '',
+      index: 0
     }
   },
   methods: {
@@ -32,8 +33,12 @@ export default defineComponent({
       if (!input.count) {
         return;
       }
-      this.focus = input.guess;
-      document.querySelector('.wikiHolder').scrollIntoView(input.list[0])
+      if (this.focus !== input.guess) {
+        this.focus = input.guess;
+        this.index = 0;
+      }
+      const element = input.list[this.index++ % input.list.length];
+      window.scrollTo(0, element.offsetTop - 60);
     },
   },
 })
