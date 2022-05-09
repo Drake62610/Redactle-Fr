@@ -6,8 +6,9 @@ import { defineComponent } from 'vue'
 
 <script lang="ts">
 type Guess = {
-  guess: string
-  count: number
+  guess: string;
+  count: number;
+  list: Element[];
 }
 
 export default defineComponent({
@@ -32,6 +33,7 @@ export default defineComponent({
         return;
       }
       this.focus = input.guess;
+      document.querySelector('.wikiHolder').scrollIntoView(input.list[0])
     },
   },
 })

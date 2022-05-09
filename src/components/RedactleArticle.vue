@@ -40,6 +40,7 @@ export default defineComponent({
         this.currentHighlighted = value;
 
         // Reveal word
+        const list = [];
         this.baffled
           .filter((baffle) => {
             return baffle.formatedString === value || hasWon;
@@ -50,13 +51,18 @@ export default defineComponent({
               matchGuess.e.classList.add('highlighted');
             }
             count++;
+            list.push(matchGuess.e);
           })
         // [...document.getElementsByClassName('innerTxt')]
         // .forEach((element) => {
         //   console.log(element);
         //   element.classList.add("highlighted");
         // })
-        this.$emit('update', { guess: value, count });
+        this.$emit('update', { 
+            guess: value,
+            count,
+            list
+        });
       }
     },
     focus(value) {
@@ -280,6 +286,12 @@ export default defineComponent({
             .replace(/[\u0300-\u036f]/g, '')
             .toLowerCase();
           this.isReady = true;
+
+          setTimeout(() => {
+            while (this.cleanHtml.body.firstChild) {
+                document.getElementById('content').appendChild(this.cleanHtml.body.firstChild)
+            }
+          });
         })
     } catch (error) {
       console.log(error);
@@ -303,8 +315,8 @@ export default defineComponent({
 <template>
   <div
     v-if="isReady"
+    id="content"
     class="mw-parser-output"
-    v-html="cleanHtml.body.innerHTML"
   ></div>
 </template>
 
