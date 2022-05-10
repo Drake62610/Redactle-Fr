@@ -1,5 +1,6 @@
 <template>
   <div class="input-group m-3" id="inGrp">
+    <button class="btn btn-outline-secondary" type="button" @click="goToTop()">▲ Top</button>
     <input
       type="text"
       class="form-text-lg"
@@ -40,6 +41,9 @@ export default defineComponent({
         this.$emit('update', formatedInput)
       }
       this.inputField = ''
+    },
+    goToTop() {
+        this.$emit('top');
     },
   },
 })

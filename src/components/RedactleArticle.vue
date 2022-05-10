@@ -25,7 +25,8 @@ export default defineComponent({
   watch: {
     guess(value) {
       let count = 0
-      const hasWon = value === this.articleName
+      // Check if not already guessed
+      const hasWon = value === this.articleName;
       if (this.baffled) {
         // Remove Highlight
         if (this.currentHighlighted) {
@@ -235,7 +236,7 @@ export default defineComponent({
               'p, blockquote, h1, h2, h3, table, li, i, cite, span',
             ),
           ]
-            .filter((e) => !e.firstChild)
+            // .filter((e) => !e.firstChild)
             .forEach((e) => {
               if (e.firstChild) {
               }
@@ -245,7 +246,6 @@ export default defineComponent({
                 '<span class="punctuation">$1</span>',
               )
             }),
-            console.log(this.cleanHtml.body.innerHTML)
           this.cleanHtml.body.innerHTML = this.cleanHtml.body.innerHTML
             .replace(/&lt;/g, '')
             .replace(/&gt;/g, '')

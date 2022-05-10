@@ -6,9 +6,9 @@ import { defineComponent } from 'vue'
 
 <script lang="ts">
 type Guess = {
-  guess: string;
-  count: number;
-  list: HTMLElement[];
+  guess: string
+  count: number
+  list: HTMLElement[]
 }
 
 export default defineComponent({
@@ -18,27 +18,43 @@ export default defineComponent({
       guess: '',
       guesses: new Array<Guess>(),
       focus: '',
-      index: 0
+      index: 0,
     }
   },
   methods: {
     inputUpdated(event: string): void {
-      this.guess = event;
+      this.guess = event
     },
     handleGuesses(event: Guess): void {
-      this.guesses.push(event);
-      this.focusWord(event);
+      let isDuplicate = false
+      this.guesses.forEach((guess) => {
+        if (guess.guess === event.guess) {
+          this.focusWord(event)
+          isDuplicate = true;
+          return;
+        }
+      })
+
+      if (!isDuplicate) {
+        this.guesses.push(event);
+        this.focusWord(event);
+      }
+    },
+    goToTop(): void {
+      window.scrollTo(0, 0);
     },
     focusWord(input: Guess): void {
       if (!input.count) {
-        return;
+        return
       }
       if (this.focus !== input.guess) {
-        this.focus = input.guess;
-        this.index = 0;
+        this.focus = input.guess
+        this.index = 0
       }
-      const element = input.list[this.index++ % input.list.length] as HTMLElement;
-      window.scrollTo(0, element.offsetTop - 60);
+      const element = input.list[
+        this.index++ % input.list.length
+      ] as HTMLElement
+      window.scrollTo(0, element.offsetTop - 60)
     },
   },
 })
@@ -90,11 +106,11 @@ export default defineComponent({
     </nav>
 
     <div class="container container-lg wikiHolder">
-      <RedactleArticle @update="handleGuesses" :guess="guess" :focus="focus"/>
+      <RedactleArticle @update="handleGuesses" :guess="guess" :focus="focus" />
     </div>
 
     <div class="bg-dark fixed-bottom">
-      <RedactleInput @update="inputUpdated" />
+      <RedactleInput @update="inputUpdated" @top="goToTop" />
     </div>
   </body>
 </template>
