@@ -6,8 +6,9 @@ import { defineComponent } from 'vue'
 
 <script lang="ts">
 type Guess = {
-  guess: string
-  count: number
+  guess: string;
+  count: number;
+  list: Element[];
 }
 
 export default defineComponent({
@@ -17,6 +18,7 @@ export default defineComponent({
       guess: '',
       guesses: new Array<Guess>(),
       focus: '',
+      index: 0
     }
   },
   methods: {
@@ -31,7 +33,12 @@ export default defineComponent({
       if (!input.count) {
         return;
       }
-      this.focus = input.guess;
+      if (this.focus !== input.guess) {
+        this.focus = input.guess;
+        this.index = 0;
+      }
+      const element = input.list[this.index++ % input.list.length];
+      window.scrollTo(0, element.offsetTop - 60);
     },
   },
 })
