@@ -40,7 +40,7 @@ export default defineComponent({
         this.currentHighlighted = value;
 
         // Reveal word
-        const list = [];
+        const list: Element[] = [];
         this.baffled
           .filter((baffle) => {
             return baffle.formatedString === value || hasWon;
@@ -289,7 +289,7 @@ export default defineComponent({
 
           setTimeout(() => {
             while (this.cleanHtml.body.firstChild) {
-                document.getElementById('content').appendChild(this.cleanHtml.body.firstChild)
+                document.getElementById('content')?.appendChild(this.cleanHtml.body.firstChild)
             }
           });
         })

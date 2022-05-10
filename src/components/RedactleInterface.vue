@@ -8,7 +8,7 @@ import { defineComponent } from 'vue'
 type Guess = {
   guess: string;
   count: number;
-  list: Element[];
+  list: HTMLElement[];
 }
 
 export default defineComponent({
@@ -37,7 +37,7 @@ export default defineComponent({
         this.focus = input.guess;
         this.index = 0;
       }
-      const element = input.list[this.index++ % input.list.length];
+      const element = input.list[this.index++ % input.list.length] as HTMLElement;
       window.scrollTo(0, element.offsetTop - 60);
     },
   },
