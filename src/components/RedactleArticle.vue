@@ -24,61 +24,61 @@ export default defineComponent({
   },
   watch: {
     guess(value) {
-      let count = 0;
+      let count = 0
       const hasWon = value === this.articleName
       if (this.baffled) {
         // Remove Highlight
         if (this.currentHighlighted) {
           this.baffled
             .filter((baffle) => {
-              return baffle.formatedString === this.currentHighlighted;
+              return baffle.formatedString === this.currentHighlighted
             })
             .forEach((matchGuess) => {
-              matchGuess.e.classList.remove('highlighted');
+              matchGuess.e.classList.remove('highlighted')
             })
         }
-        this.currentHighlighted = value;
+        this.currentHighlighted = value
 
         // Reveal word
-        const list: Element[] = [];
+        const list: Element[] = []
         this.baffled
           .filter((baffle) => {
-            return baffle.formatedString === value || hasWon;
+            return baffle.formatedString === value || hasWon
           })
           .forEach((matchGuess) => {
-            matchGuess.e.innerHTML = matchGuess.original;
+            matchGuess.e.innerHTML = matchGuess.original
             if (!hasWon) {
-              matchGuess.e.classList.add('highlighted');
+              matchGuess.e.classList.add('highlighted')
             }
-            count++;
-            list.push(matchGuess.e);
+            count++
+            list.push(matchGuess.e)
           })
         // [...document.getElementsByClassName('innerTxt')]
         // .forEach((element) => {
         //   console.log(element);
         //   element.classList.add("highlighted");
         // })
-        this.$emit('update', { 
-            guess: value,
-            count,
-            list
-        });
+        this.$emit('update', {
+          guess: value,
+          count,
+          list,
+        })
       }
     },
     focus(value) {
       if (this.baffled) {
         if (value === this.articleName) {
-          return;
+          return
         }
 
         // Remove Highlight
         if (this.currentHighlighted) {
           this.baffled
             .filter((baffle) => {
-              return baffle.formatedString === this.currentHighlighted;
+              return baffle.formatedString === this.currentHighlighted
             })
             .forEach((matchGuess) => {
-              matchGuess.e.classList.remove('highlighted');
+              matchGuess.e.classList.remove('highlighted')
             })
         }
         this.currentHighlighted = value
@@ -96,45 +96,42 @@ export default defineComponent({
   },
   async created() {
     try {
-      this.articleName = 'Probabilité';
+      this.articleName = 'Lego'
       await axios
         .get<{ parse: { text: string } }>(
           `https://fr.wikipedia.org/w/api.php?action=parse&format=json&page=${this.articleName}&prop=text&formatversion=2&origin=*`,
         )
         .then((res) => {
           if (res.status !== 200) {
-            throw new Error(`Server error: [${res.status}] [${res.statusText}] [${res.request}]`);
+            throw new Error(
+              `Server error: [${res.status}] [${res.statusText}] [${res.request}]`,
+            )
           }
 
           // Compute text
-          const parser = new DOMParser();
+          const parser = new DOMParser()
           var cleanText: string = res.data.parse.text
             .replace(/<img[^>]*>/g, '')
             .replace(/\<small\>/g, '')
             .replace(/\<\/small\>/g, '')
             .replace(/–/g, '-')
-            .replace(/<audio.*<\/audio>/g, '');
-          this.cleanHtml = parser.parseFromString(cleanText, 'text/html');
+            .replace(/<audio.*<\/audio>/g, '')
+          this.cleanHtml = parser.parseFromString(cleanText, 'text/html')
 
           this.cleanHtml.querySelectorAll('small').forEach((e) => {
-            e.replaceWith(...e.childNodes);
-          });
+            e.replaceWith(...e.childNodes)
+          })
 
           //Remove References /!\ Very bad code
-          const seeAlso = [];
-          if (
-            this.cleanHtml.getElementById('Voir_aussi')
-              ?.parentNode
-          ) {
+          const seeAlso = []
+          if (this.cleanHtml.getElementById('Voir_aussi')?.parentNode) {
             seeAlso.push(
-              this.cleanHtml.getElementById('Voir_aussi')
-                ?.parentNode
-            );
+              this.cleanHtml.getElementById('Voir_aussi')?.parentNode,
+            )
           }
 
-
           seeAlso.forEach((seeing) => {
-            var e = this.cleanHtml.getElementsByClassName('mw-parser-output');
+            var e = this.cleanHtml.getElementsByClassName('mw-parser-output')
             if (seeing?.parentNode?.children) {
               let alsoIndex = Array.prototype.indexOf.call(
                 seeing?.parentNode?.children,
@@ -166,7 +163,7 @@ export default defineComponent({
           // Remove unused elements
           this.cleanHtml
             .querySelectorAll(
-              "#Notes_et_références, #Articles_connexes, #Liens_externes, .nowrap, #bandeau-portail, [rel='mw-deduplicated-inline-style'], [title='Name at birth'], [aria-labelledby='micro-periodic-table-title'], .barbox, .wikitable, .clade, .Expand_section, .IPA, .thumb, .mw-empty-elt, .mw-editsection, .nounderlines, .nomobile, .searchaux, #toc, .sidebar, .sistersitebox, .noexcerpt, #External_links, #Further_reading, .hatnote, .haudio, .portalbox, .mw-references-wrap, .infobox, .unsolved, .navbox, .metadata, .refbegin, .reflist, .mw-stack, #Notes, #References, .reference, .quotebox, .collapsible, .uncollapsed, .mw-collapsible, .mw-made-collapsible, .mbox-small, .mbox, #coordinates, .succession-box, .noprint, .mwe-math-element, .cs1-ws-icon",
+              "#Bibliographie, #Notes_et_références, #Articles_connexes, #Liens_externes, .nowrap, #bandeau-portail, [rel='mw-deduplicated-inline-style'], [title='Name at birth'], [aria-labelledby='micro-periodic-table-title'], .barbox, .wikitable, .clade, .Expand_section, .IPA, .thumb, .mw-empty-elt, .mw-editsection, .nounderlines, .nomobile, .searchaux, #toc, .sidebar, .sistersitebox, .noexcerpt, #External_links, #Further_reading, .hatnote, .haudio, .portalbox, .mw-references-wrap, .infobox, .unsolved, .navbox, .metadata, .refbegin, .reflist, .mw-stack, #Notes, #References, .reference, .quotebox, .collapsible, .uncollapsed, .mw-collapsible, .mw-made-collapsible, .mbox-small, .mbox, #coordinates, .succession-box, .noprint, .mwe-math-element, .cs1-ws-icon",
             )
             .forEach((e) => {
               e.remove()
@@ -233,29 +230,35 @@ export default defineComponent({
             e.removeAttribute('class')
             e.removeAttribute('style')
           })
-          this.cleanHtml
-            .querySelectorAll(
+          ;[
+            ...this.cleanHtml.querySelectorAll(
               'p, blockquote, h1, h2, h3, table, li, i, cite, span',
-            )
+            ),
+          ]
+            .filter((e) => !e.firstChild)
             .forEach((e) => {
+              if (e.firstChild) {
+              }
+              // e.innerHTML = e.innerHTML.replace(/(\/p)/, '');
               e.innerHTML = e.innerHTML.replace(
                 /([\.,:()\[\]?!;`\~\-\u2013\—&*"'’/])/g,
                 '<span class="punctuation">$1</span>',
               )
             }),
-            (this.cleanHtml.body.innerHTML = this.cleanHtml.body.innerHTML
-              .replace(/&lt;/g, '<')
-              .replace(/&gt;/g, '>')
-              .replace(/(<style.*<\/style>)/g, '')
-              .replace(
-                /(<span class="punctuation">.<\/span>)|(^|<\/?[^>]+>|\s+)|([^\s<]+)/g,
-                '$1$2<span class="innerTxt">$3</span>',
-              )
-              .replace(
-                '<<span class="innerTxt">h1>',
-                '<h1><span class="innerTxt">',
-              )
-              .replace(/(<!--.*?-->)|(<!--[\S\s]+?-->)|(<!--[\S\s]*?$)/g, ''))
+            console.log(this.cleanHtml.body.innerHTML)
+          this.cleanHtml.body.innerHTML = this.cleanHtml.body.innerHTML
+            .replace(/&lt;/g, '')
+            .replace(/&gt;/g, '')
+            .replace(/(<style.*<\/style>)/g, '')
+            .replace(
+              /(<span class="punctuation">.<\/span>)|(^|<\/?[^>]+>|\s+)|([^\s<]+)/g,
+              '$1$2<span class="innerTxt">$3</span>',
+            )
+            .replace(
+              '<<span class="innerTxt">h1>',
+              '<h1><span class="innerTxt">',
+            )
+            .replace(/(<!--.*?-->)|(<!--[\S\s]+?-->)|(<!--[\S\s]*?$)/g, '')
 
           // this.cleanHtml.querySelectorAll('span.innertxt').forEach((e) => {
           //   console.log(e.innerHTML);
@@ -263,20 +266,20 @@ export default defineComponent({
           //     .replace(/['"]+/g, '</span><span class="punctuation">\'</span><span class="innertxt"');
           // });
           this.cleanHtml.querySelectorAll('*:empty, style').forEach((e) => {
-            e.remove();
+            e.remove()
           })
           this.cleanHtml.querySelectorAll('span.innertxt').forEach((e) => {
             const txt = e.innerHTML
               .normalize('NFD')
               .replace(/[\u0300-\u036f]/g, '')
-              .toLowerCase();
+              .toLowerCase()
             if (!commonWords.includes(txt) && e.firstElementChild === null) {
               this.baffled.push({
                 formatedString: txt,
                 e,
                 original: e.innerHTML,
-              });
-              e.innerHTML = '█'.repeat(e.innerHTML.length);
+              })
+              // e.innerHTML = '█'.repeat(e.innerHTML.length);
             }
           })
 
@@ -284,27 +287,29 @@ export default defineComponent({
           this.articleName = this.articleName
             .normalize('NFD')
             .replace(/[\u0300-\u036f]/g, '')
-            .toLowerCase();
-          this.isReady = true;
+            .toLowerCase()
+          this.isReady = true
 
           setTimeout(() => {
             while (this.cleanHtml.body.firstChild) {
-                document.getElementById('content')?.appendChild(this.cleanHtml.body.firstChild)
+              document
+                .getElementById('content')
+                ?.appendChild(this.cleanHtml.body.firstChild)
             }
-          });
+          })
         })
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
   },
   methods: {
     emptyHTMLCollection(e: HTMLCollectionOf<HTMLElement>) {
       while (e.length) {
-        let parent = e[0].parentNode;
+        let parent = e[0].parentNode
         while (e[0].firstChild) {
-          parent?.insertBefore(e[0].firstChild, e[0]);
+          parent?.insertBefore(e[0].firstChild, e[0])
         }
-        parent?.removeChild(e[0]);
+        parent?.removeChild(e[0])
       }
       return
     },
@@ -313,11 +318,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div
-    v-if="isReady"
-    id="content"
-    class="mw-parser-output"
-  ></div>
+  <div v-if="isReady" id="content" class="mw-parser-output"></div>
 </template>
 
 <style scoped>
