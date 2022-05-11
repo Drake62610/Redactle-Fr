@@ -97,7 +97,7 @@ export default defineComponent({
   },
   async created() {
     try {
-      this.articleName = 'Couture'
+      this.articleName = 'Couture';
       await axios
         .get<{ parse: { text: string } }>(
           `https://fr.wikipedia.org/w/api.php?action=parse&format=json&page=${this.articleName}&prop=text&formatversion=2&origin=*`,
@@ -123,27 +123,6 @@ export default defineComponent({
             e.replaceWith(...e.childNodes)
           })
 
-          //Remove References /!\ Very bad code
-          const seeAlso = []
-          if (this.cleanHtml.getElementById('Voir_aussi')?.parentNode) {
-            seeAlso.push(
-              this.cleanHtml.getElementById('Voir_aussi')?.parentNode,
-            )
-          }
-
-          seeAlso.forEach((seeing) => {
-            var e = this.cleanHtml.getElementsByClassName('mw-parser-output')
-            if (seeing?.parentNode?.children) {
-              let alsoIndex = Array.prototype.indexOf.call(
-                seeing?.parentNode?.children,
-                seeing,
-              )
-              for (var i = alsoIndex; i < e[0].children.length; i++) {
-                e[0].removeChild(e[0].children[i])
-              }
-            }
-          })
-
           this.cleanHtml.querySelectorAll('time').forEach((e) => {
             // if (e.getAttribute('datetime') === null) {
             //   console.log(e.parentNode?.firstChild)
@@ -161,14 +140,21 @@ export default defineComponent({
             }
           })
 
+          // Remove Annexe
+          console.log(this.cleanHtml.querySelector("#Articles_connexes")?.parentElement?.nextElementSibling);
+          this.cleanHtml.querySelector("#Articles_connexes")?.parentElement?.nextElementSibling?.remove();
+          this.cleanHtml.querySelector("#Liens_externes")?.parentElement?.nextElementSibling?.remove();
+
           // Remove unused elements
           this.cleanHtml
             .querySelectorAll(
-              "#Bibliographie, #Notes_et_références, #Articles_connexes, #Liens_externes, .nowrap, #bandeau-portail, [rel='mw-deduplicated-inline-style'], [title='Name at birth'], [aria-labelledby='micro-periodic-table-title'], .barbox, .wikitable, .clade, .Expand_section, .IPA, .thumb, .mw-empty-elt, .mw-editsection, .nounderlines, .nomobile, .searchaux, #toc, .sidebar, .sistersitebox, .noexcerpt, #External_links, #Further_reading, .hatnote, .haudio, .portalbox, .mw-references-wrap, .infobox, .unsolved, .navbox, .metadata, .refbegin, .reflist, .mw-stack, #Notes, #References, .reference, .quotebox, .collapsible, .uncollapsed, .mw-collapsible, .mw-made-collapsible, .mbox-small, .mbox, #coordinates, .succession-box, .noprint, .mwe-math-element, .cs1-ws-icon",
+              "#Annexes, #Bibliographie, #Notes_et_références, #Articles_connexes, #Liens_externes, .nowrap, #bandeau-portail, [rel='mw-deduplicated-inline-style'], [title='Name at birth'], [aria-labelledby='micro-periodic-table-title'], .barbox, .wikitable, .clade, .Expand_section, .IPA, .thumb, .mw-empty-elt, .mw-editsection, .nounderlines, .nomobile, .searchaux, #toc, .sidebar, .sistersitebox, .noexcerpt, #External_links, #Further_reading, .hatnote, .haudio, .portalbox, .mw-references-wrap, .infobox, .unsolved, .navbox, .metadata, .refbegin, .reflist, .mw-stack, #Notes, #References, .reference, .quotebox, .collapsible, .uncollapsed, .mw-collapsible, .mw-made-collapsible, .mbox-small, .mbox, #coordinates, .succession-box, .noprint, .mwe-math-element, .cs1-ws-icon",
             )
             .forEach((e) => {
-              e.remove()
+              e.remove();
             })
+
+          
 
           // Handle anchors
           this.emptyHTMLCollection(this.cleanHtml.getElementsByTagName('a'))
@@ -279,7 +265,7 @@ export default defineComponent({
                 e,
                 original: e.innerHTML,
               })
-              e.innerHTML = '█'.repeat(e.innerHTML.length);
+              // e.innerHTML = '█'.repeat(e.innerHTML.length);
             }
           })
 
