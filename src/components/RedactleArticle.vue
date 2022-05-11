@@ -265,7 +265,7 @@ export default defineComponent({
                 e,
                 original: e.innerHTML,
               })
-              // e.innerHTML = '█'.repeat(e.innerHTML.length);
+              e.innerHTML = '█'.repeat(e.innerHTML.length);
             }
           })
 
