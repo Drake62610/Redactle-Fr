@@ -1,6 +1,8 @@
 <template>
   <div class="input-group m-3" id="inGrp">
-    <button class="btn btn-outline-secondary" type="button" @click="goToTop()">▲ Top</button>
+    <button class="btn btn-outline-secondary" type="button" @click="goToTop()">
+      ▲ Top
+    </button>
     <input
       type="text"
       class="form-text-lg"
@@ -34,16 +36,21 @@ export default defineComponent({
   },
   methods: {
     updateInput() {
-      const formatedInput = this.inputField.normalize('NFD')
-              .replace(/[\u0300-\u036f]/g, '')
-              .toLowerCase()
+      if (this.inputField === '') {
+        return
+      }
+      const formatedInput = this.inputField
+        .normalize('NFD')
+        .replace(/^\s*$/, '')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
       if (!commonWords.includes(formatedInput)) {
         this.$emit('update', formatedInput)
       }
       this.inputField = ''
     },
     goToTop() {
-        this.$emit('top');
+      this.$emit('top')
     },
   },
 })

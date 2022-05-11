@@ -17,6 +17,7 @@ export default defineComponent({
     return {
       guess: '',
       guesses: new Array<Guess>(),
+      superHighlighted: document.createElement("div") as Element,
       focus: '',
       index: 0,
     }
@@ -30,18 +31,18 @@ export default defineComponent({
       this.guesses.forEach((guess) => {
         if (guess.guess === event.guess) {
           this.focusWord(event)
-          isDuplicate = true;
-          return;
+          isDuplicate = true
+          return
         }
       })
 
       if (!isDuplicate) {
-        this.guesses.push(event);
-        this.focusWord(event);
+        this.guesses.push(event)
+        this.focusWord(event)
       }
     },
     goToTop(): void {
-      window.scrollTo(0, 0);
+      window.scrollTo(0, 0)
     },
     focusWord(input: Guess): void {
       if (!input.count) {
@@ -54,7 +55,15 @@ export default defineComponent({
       const element = input.list[
         this.index++ % input.list.length
       ] as HTMLElement
-      window.scrollTo(0, element.offsetTop - 60)
+
+      // Highlight
+      this.superHighlighted.classList.remove('superHighlighted');
+      this.superHighlighted.classList.add('highlighted');
+      element.classList.add('superHighlighted');
+      this.superHighlighted = element;
+
+      // Scroll
+      window.scrollTo(0, element.offsetTop - 120)
     },
   },
 })
@@ -63,7 +72,7 @@ export default defineComponent({
 <template>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-      <span class="navbar-brand mb-0 h1 mx-4">Redactle FR</span>
+      <span class="navbar-brand mb-0 h1 mx-4">Redactus</span>
       <button
         class="navbar-toggler mx-2"
         type="button"

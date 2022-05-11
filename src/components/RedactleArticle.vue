@@ -228,7 +228,7 @@ export default defineComponent({
               }
               // e.innerHTML = e.innerHTML.replace(/(\/p)/, '');
               e.innerHTML = e.innerHTML.replace(
-                /([\.,:()\[\]?!;`\~\-\u2013\—&*"'’/])/g,
+                /([\.,:()\[\]?!;`\~\-\u2013\—&*"'«»%’/])/g,
                 '<span class="punctuation">$1</span>',
               )
             }),
@@ -308,11 +308,11 @@ export default defineComponent({
 </template>
 
 <style scoped>
-.mw-parser-output >>> .highlighted {
+.mw-parser-output ::v-deep(.highlighted) {
   background-color: #00585e !important;
 }
 
-.mw-parser-output >>> .superHighlighted {
+.mw-parser-output ::v-deep(.superHighlighted) {
   background-color: #00becc !important;
   color: #0f0f0f;
 }
