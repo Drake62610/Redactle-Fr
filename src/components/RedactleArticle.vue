@@ -97,7 +97,7 @@ export default defineComponent({
   },
   async created() {
     try {
-      this.articleName = 'Lego'
+      this.articleName = 'Couture'
       await axios
         .get<{ parse: { text: string } }>(
           `https://fr.wikipedia.org/w/api.php?action=parse&format=json&page=${this.articleName}&prop=text&formatversion=2&origin=*`,
