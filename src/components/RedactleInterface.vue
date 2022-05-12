@@ -58,7 +58,7 @@ export default defineComponent({
 
       // Highlight
       this.superHighlighted.classList.remove('superHighlighted');
-      this.superHighlighted.classList.add('highlighted');
+      this.superHighlighted.classList.remove('highlighted');
       element.classList.add('superHighlighted');
       this.superHighlighted = element;
 
