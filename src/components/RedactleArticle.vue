@@ -26,7 +26,7 @@ export default defineComponent({
     guess(value) {
       let count = 0
       // Check if not already guessed
-      const hasWon = value === this.articleName;
+      const hasWon = value === this.articleName
       if (this.baffled) {
         // Remove Highlight
         if (this.currentHighlighted) {
@@ -97,7 +97,7 @@ export default defineComponent({
   },
   async created() {
     try {
-      this.articleName = 'Couture';
+      this.articleName = 'Phonographe'
       await axios
         .get<{ parse: { text: string } }>(
           `https://fr.wikipedia.org/w/api.php?action=parse&format=json&page=${this.articleName}&prop=text&formatversion=2&origin=*`,
@@ -123,38 +123,27 @@ export default defineComponent({
             e.replaceWith(...e.childNodes)
           })
 
-          this.cleanHtml.querySelectorAll('time').forEach((e) => {
-            // if (e.getAttribute('datetime') === null) {
-            //   console.log(e.parentNode?.firstChild)
-            // }
-            const replace = new Date(
-              (e.getAttribute('datetime')
-                ? e.getAttribute('datetime')
-                : '') as string,
-            )
-            var newTag = document.createTextNode(
-              replace.toLocaleDateString('fr-FR'),
-            )
-            if (e.firstChild) {
-              e.parentNode?.replaceChild(newTag, e)
-            }
-          })
-
           // Remove Annexe
-          console.log(this.cleanHtml.querySelector("#Articles_connexes")?.parentElement?.nextElementSibling);
-          this.cleanHtml.querySelector("#Articles_connexes")?.parentElement?.nextElementSibling?.remove();
-          this.cleanHtml.querySelector("#Liens_externes")?.parentElement?.nextElementSibling?.remove();
+          this.cleanHtml
+            .querySelector('#Articles_connexes')
+            ?.parentElement?.nextElementSibling?.remove()
+          this.cleanHtml
+            .querySelector('#Liens_externes')
+            ?.parentElement?.nextElementSibling?.remove()
+          this.cleanHtml
+            .querySelector('#Galerie')
+            ?.parentElement?.nextElementSibling?.remove()
+          this.cleanHtml.querySelector("#Notes_et_références")?.parentElement?.nextElementSibling?.remove();
+          this.cleanHtml.querySelector("#Bibliographie")?.parentElement?.nextElementSibling?.remove();
 
           // Remove unused elements
           this.cleanHtml
             .querySelectorAll(
-              "#Annexes, #Bibliographie, #Notes_et_références, #Articles_connexes, #Liens_externes, .nowrap, #bandeau-portail, [rel='mw-deduplicated-inline-style'], [title='Name at birth'], [aria-labelledby='micro-periodic-table-title'], .barbox, .wikitable, .clade, .Expand_section, .IPA, .thumb, .mw-empty-elt, .mw-editsection, .nounderlines, .nomobile, .searchaux, #toc, .sidebar, .sistersitebox, .noexcerpt, #External_links, #Further_reading, .hatnote, .haudio, .portalbox, .mw-references-wrap, .infobox, .unsolved, .navbox, .metadata, .refbegin, .reflist, .mw-stack, #Notes, #References, .reference, .quotebox, .collapsible, .uncollapsed, .mw-collapsible, .mw-made-collapsible, .mbox-small, .mbox, #coordinates, .succession-box, .noprint, .mwe-math-element, .cs1-ws-icon",
+              "#Galerie, #Annexes, #Bibliographie, #Notes_et_références, #Articles_connexes, #Liens_externes, .nowrap, #bandeau-portail, [rel='mw-deduplicated-inline-style'], [title='Name at birth'], [aria-labelledby='micro-periodic-table-title'], .barbox, .wikitable, .clade, .Expand_section, .IPA, .thumb, .mw-empty-elt, .mw-editsection, .nounderlines, .nomobile, .searchaux, #toc, .sidebar, .sistersitebox, .noexcerpt, #External_links, #Further_reading, .hatnote, .haudio, .portalbox, .mw-references-wrap, .infobox, .unsolved, .navbox, .metadata, .refbegin, .reflist, .mw-stack, #Notes, #References, .reference, .quotebox, .collapsible, .uncollapsed, .mw-collapsible, .mw-made-collapsible, .mbox-small, .mbox, #coordinates, .succession-box, .noprint, .mwe-math-element, .cs1-ws-icon",
             )
             .forEach((e) => {
-              e.remove();
+              e.remove()
             })
-
-          
 
           // Handle anchors
           this.emptyHTMLCollection(this.cleanHtml.getElementsByTagName('a'))
@@ -187,6 +176,24 @@ export default defineComponent({
           // Unwrap headline parents
           this.cleanHtml.querySelectorAll('.mw-headline').forEach((e) => {
             e.replaceWith(...e.childNodes)
+          })
+
+          //Handle times
+          this.cleanHtml.querySelectorAll('time').forEach((e) => {
+            // if (e.getAttribute('datetime') === null) {
+            //   console.log(e.parentNode?.firstChild)
+            // }
+            const replace = new Date(
+              (e.getAttribute('datetime')
+                ? e.getAttribute('datetime')
+                : '') as string,
+            )
+            var newTag = document.createTextNode(
+              replace.toLocaleDateString('fr-FR'),
+            )
+            if (e.firstChild) {
+              e.parentNode?.replaceChild(newTag, e)
+            }
           })
 
           var titleHolder = this.cleanHtml.createElement('h1')
@@ -232,19 +239,19 @@ export default defineComponent({
                 '<span class="punctuation">$1</span>',
               )
             }),
-          this.cleanHtml.body.innerHTML = this.cleanHtml.body.innerHTML
-            .replace(/&lt;/g, '')
-            .replace(/&gt;/g, '')
-            .replace(/(<style.*<\/style>)/g, '')
-            .replace(
-              /(<span class="punctuation">.<\/span>)|(^|<\/?[^>]+>|\s+)|([^\s<]+)/g,
-              '$1$2<span class="innerTxt">$3</span>',
-            )
-            .replace(
-              '<<span class="innerTxt">h1>',
-              '<h1><span class="innerTxt">',
-            )
-            .replace(/(<!--.*?-->)|(<!--[\S\s]+?-->)|(<!--[\S\s]*?$)/g, '')
+            (this.cleanHtml.body.innerHTML = this.cleanHtml.body.innerHTML
+              .replace(/&lt;/g, '')
+              .replace(/&gt;/g, '')
+              .replace(/(<style.*<\/style>)/g, '')
+              .replace(
+                /(<span class="punctuation">.<\/span>)|(^|<\/?[^>]+>|\s+)|([^\s<]+)/g,
+                '$1$2<span class="innerTxt">$3</span>',
+              )
+              .replace(
+                '<<span class="innerTxt">h1>',
+                '<h1><span class="innerTxt">',
+              )
+              .replace(/(<!--.*?-->)|(<!--[\S\s]+?-->)|(<!--[\S\s]*?$)/g, ''))
 
           // this.cleanHtml.querySelectorAll('span.innertxt').forEach((e) => {
           //   console.log(e.innerHTML);
@@ -265,7 +272,7 @@ export default defineComponent({
                 e,
                 original: e.innerHTML,
               })
-              e.innerHTML = '█'.repeat(e.innerHTML.length);
+              e.innerHTML = '█'.repeat(e.innerHTML.length)
             }
           })
 
