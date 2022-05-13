@@ -41,6 +41,9 @@ export default defineComponent({
         this.focusWord(event)
       }
     },
+    handleWin(): void {
+      this.superHighlighted.classList.remove('superHighlighted');
+    },
     goToTop(): void {
       window.scrollTo(0, 0)
     },
@@ -115,7 +118,7 @@ export default defineComponent({
     </nav>
 
     <div class="container container-lg wikiHolder">
-      <RedactleArticle @update="handleGuesses" :guess="guess" :focus="focus" />
+      <RedactleArticle @update="handleGuesses" @win="handleWin" :guess="guess" :focus="focus" />
     </div>
 
     <div class="bg-dark fixed-bottom">

@@ -25,8 +25,11 @@ export default defineComponent({
   watch: {
     guess(value) {
       let count = 0
+
       // Check if not already guessed
-      const hasWon = value === this.articleName
+      this.articleName = this.articleName.replace(value, '')
+      const hasWon = this.articleName === ''
+
       if (this.baffled) {
         // Remove Highlight
         if (this.currentHighlighted) {
@@ -64,11 +67,15 @@ export default defineComponent({
           count,
           list,
         })
+
+        if (hasWon) {
+          this.$emit('win')
+        }
       }
     },
     focus(value) {
       if (this.baffled) {
-        if (value === this.articleName) {
+        if (this.articleName === '') {
           return
         }
 
@@ -97,7 +104,7 @@ export default defineComponent({
   },
   async created() {
     try {
-      this.articleName = 'Phonographe'
+      this.articleName = 'Henry_Ford'
       await axios
         .get<{ parse: { text: string } }>(
           `https://fr.wikipedia.org/w/api.php?action=parse&format=json&page=${this.articleName}&prop=text&formatversion=2&origin=*`,
@@ -133,8 +140,12 @@ export default defineComponent({
           this.cleanHtml
             .querySelector('#Galerie')
             ?.parentElement?.nextElementSibling?.remove()
-          this.cleanHtml.querySelector("#Notes_et_références")?.parentElement?.nextElementSibling?.remove();
-          this.cleanHtml.querySelector("#Bibliographie")?.parentElement?.nextElementSibling?.remove();
+          this.cleanHtml
+            .querySelector('#Notes_et_références')
+            ?.parentElement?.nextElementSibling?.remove()
+          this.cleanHtml
+            .querySelector('#Bibliographie')
+            ?.parentElement?.nextElementSibling?.remove()
 
           // Remove unused elements
           this.cleanHtml
@@ -281,6 +292,8 @@ export default defineComponent({
             .normalize('NFD')
             .replace(/[\u0300-\u036f]/g, '')
             .toLowerCase()
+            .replace('_', '')
+            .replace(' ', '')
           this.isReady = true
 
           setTimeout(() => {

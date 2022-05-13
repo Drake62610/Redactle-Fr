@@ -43,6 +43,7 @@ export default defineComponent({
         .normalize('NFD')
         .replace(/^\s*$/, '')
         .replace(/[\u0300-\u036f]/g, '')
+        .replace(' ', '')
         .toLowerCase()
       if (!commonWords.includes(formatedInput)) {
         this.$emit('update', formatedInput)
