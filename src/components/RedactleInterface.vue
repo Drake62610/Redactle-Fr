@@ -2,6 +2,7 @@
 import RedactleInput from '@/components/RedactleInput.vue'
 import RedactleArticle from '@/components/RedactleArticle.vue'
 import { defineComponent } from 'vue'
+import { DateTime } from "luxon";
 </script>
 
 <script lang="ts">
@@ -22,7 +23,19 @@ export default defineComponent({
       index: 0,
     }
   },
+  created() {
+    if (localStorage.getItem('currentTime')) {
+      const currentTime = DateTime.fromISO(localStorage.getItem('currentTime') as string);
+      if (DateTime.now().day !== currentTime.day) {
+        localStorage.clear();
+      }
+    }
+    localStorage.setItem('currentTime', DateTime.now().toISODate());
+  },
   methods: {
+    handleLoad(event: Guess[]): void {
+      this.guesses = event;
+    },
     inputUpdated(event: string): void {
       this.guess = event
     },
@@ -37,9 +50,13 @@ export default defineComponent({
       })
 
       if (!isDuplicate) {
-        this.guesses.push(event)
-        this.focusWord(event)
-      }
+        this.guesses.push(event);
+        this.focusWord(event);
+        localStorage.setItem('guesses', JSON.stringify(this.guesses.map((guess) => {
+          return {guess: guess.guess, count: guess.count};
+        })));
+      };
+
     },
     handleWin(): void {
       this.superHighlighted.classList.remove('superHighlighted');
@@ -118,7 +135,13 @@ export default defineComponent({
     </nav>
 
     <div class="container container-lg wikiHolder">
-      <RedactleArticle @update="handleGuesses" @win="handleWin" :guess="guess" :focus="focus" />
+      <RedactleArticle
+        @load="handleLoad"
+        @update="handleGuesses"
+        @win="handleWin"
+        :guess="guess"
+        :focus="focus"
+      />
     </div>
 
     <div class="bg-dark fixed-bottom">

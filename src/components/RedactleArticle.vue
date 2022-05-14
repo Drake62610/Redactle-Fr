@@ -3,6 +3,12 @@ import axios from 'axios'
 import { commonWords } from '@/assets/commonWords'
 import { defineComponent } from 'vue'
 
+type Guess = {
+  guess: string
+  count: number
+  list: Element[]
+}
+
 export default defineComponent({
   props: {
     guess: String,
@@ -13,7 +19,8 @@ export default defineComponent({
       text: JSON,
       isReady: false,
       cleanHtml: new Document(),
-      articleName: '',
+      articleName: new Array<string>(),
+      previousGuess: new Array<Guess>(),
       currentHighlighted: '',
       baffled: new Array<{
         formatedString: string
@@ -23,12 +30,14 @@ export default defineComponent({
     }
   },
   watch: {
-    guess(value) {
+    guess(value: string) {
       let count = 0
 
       // Check if not already guessed
-      this.articleName = this.articleName.replace(value, '')
-      const hasWon = this.articleName === ''
+      this.articleName = this.articleName.filter(
+        (articleWord) => articleWord !== value,
+      )
+      const hasWon = !this.articleName.length
 
       if (this.baffled) {
         // Remove Highlight
@@ -75,7 +84,7 @@ export default defineComponent({
     },
     focus(value) {
       if (this.baffled) {
-        if (this.articleName === '') {
+        if (!this.articleName.length) {
           return
         }
 
@@ -103,11 +112,23 @@ export default defineComponent({
     },
   },
   async created() {
+    let isLoading = false;
+    // Local Storage
+    if (localStorage.getItem('guesses')) {
+      this.previousGuess = JSON.parse(localStorage.getItem('guesses') as string);
+      this.previousGuess.forEach((e) => {
+        e.list = [];
+      });
+      isLoading = true;
+    }
+
     try {
-      this.articleName = 'Henry_Ford'
+      const name = 'Henry_Ford'
+      this.articleName = name.split('_')
+
       await axios
         .get<{ parse: { text: string } }>(
-          `https://fr.wikipedia.org/w/api.php?action=parse&format=json&page=${this.articleName}&prop=text&formatversion=2&origin=*`,
+          `https://fr.wikipedia.org/w/api.php?action=parse&format=json&page=${name}&prop=text&formatversion=2&origin=*`,
         )
         .then((res) => {
           if (res.status !== 200) {
@@ -208,7 +229,7 @@ export default defineComponent({
           })
 
           var titleHolder = this.cleanHtml.createElement('h1')
-          var titleTxt = this.articleName.replace(/_/g, ' ')
+          var titleTxt = this.articleName.join(' ')
           titleHolder.innerHTML = titleTxt
           this.cleanHtml.body.prepend(titleHolder)
           let ansStr = titleTxt
@@ -239,17 +260,14 @@ export default defineComponent({
             ...this.cleanHtml.querySelectorAll(
               'p, blockquote, h1, h2, h3, table, li, i, cite, span',
             ),
-          ]
-            // .filter((e) => !e.firstChild)
-            .forEach((e) => {
-              if (e.firstChild) {
-              }
-              // e.innerHTML = e.innerHTML.replace(/(\/p)/, '');
-              e.innerHTML = e.innerHTML.replace(
-                /([\.,:()\[\]?!;`\~\-\u2013\—&*"'«»%’/])/g,
-                '<span class="punctuation">$1</span>',
-              )
-            }),
+          ].forEach((e) => {
+            if (e.firstChild) {
+            }
+            e.innerHTML = e.innerHTML.replace(
+              /([\.,:()\[\]?!;`\~\-\u2013\—&*"'«»%’/])/g,
+              '<span class="punctuation">$1</span>',
+            )
+          }),
             (this.cleanHtml.body.innerHTML = this.cleanHtml.body.innerHTML
               .replace(/&lt;/g, '')
               .replace(/&gt;/g, '')
@@ -264,19 +282,28 @@ export default defineComponent({
               )
               .replace(/(<!--.*?-->)|(<!--[\S\s]+?-->)|(<!--[\S\s]*?$)/g, ''))
 
-          // this.cleanHtml.querySelectorAll('span.innertxt').forEach((e) => {
-          //   console.log(e.innerHTML);
-          //   e.innerHTML = e.innerHTML
-          //     .replace(/['"]+/g, '</span><span class="punctuation">\'</span><span class="innertxt"');
-          // });
           this.cleanHtml.querySelectorAll('*:empty, style').forEach((e) => {
             e.remove()
           })
+
+          // Load saved words AND commons words
+          let previousWords: string[];
+          if (isLoading) {
+           previousWords = this.previousGuess.map((data) => {
+            return data.guess
+          });
+          }
           this.cleanHtml.querySelectorAll('span.innertxt').forEach((e) => {
             const txt = e.innerHTML
               .normalize('NFD')
               .replace(/[\u0300-\u036f]/g, '')
               .toLowerCase()
+
+            if (isLoading && previousWords.indexOf(txt) >= 0) {
+              this.previousGuess[previousWords.indexOf(txt)]?.list.push(e);
+              return;
+            }
+
             if (!commonWords.includes(txt) && e.firstElementChild === null) {
               this.baffled.push({
                 formatedString: txt,
@@ -287,13 +314,16 @@ export default defineComponent({
             }
           })
 
-          // Format article name /!\ works only with one-word article name
-          this.articleName = this.articleName
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
-            .toLowerCase()
-            .replace('_', '')
-            .replace(' ', '')
+          this.articleName = this.articleName.map((word) => {
+            return word
+              .normalize('NFD')
+              .replace(/[\u0300-\u036f]/g, '')
+              .toLowerCase()
+              .replace('_', '')
+              .replace(' ', '')
+          });
+
+          this.$emit('load', this.previousGuess);
           this.isReady = true
 
           setTimeout(() => {
