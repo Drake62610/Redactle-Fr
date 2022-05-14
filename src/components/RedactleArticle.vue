@@ -112,14 +112,14 @@ export default defineComponent({
     },
   },
   async created() {
-    let isLoading = false;
+    let isLoading = false
     // Local Storage
     if (localStorage.getItem('guesses')) {
-      this.previousGuess = JSON.parse(localStorage.getItem('guesses') as string);
+      this.previousGuess = JSON.parse(localStorage.getItem('guesses') as string)
       this.previousGuess.forEach((e) => {
-        e.list = [];
-      });
-      isLoading = true;
+        e.list = []
+      })
+      isLoading = true
     }
 
     try {
@@ -167,11 +167,22 @@ export default defineComponent({
           this.cleanHtml
             .querySelector('#Bibliographie')
             ?.parentElement?.nextElementSibling?.remove()
+          this.cleanHtml
+            .querySelector('#Références')
+            ?.parentElement?.nextElementSibling?.remove()
 
-          // Remove unused elements
+          //Handle times before deleting .nowrap classes
+          this.cleanHtml.querySelectorAll('time').forEach((e) => {
+            console.log(e.innerText)
+            var newTag = document.createTextNode(e.innerText)
+            if (e.firstChild) {
+              e.parentNode?.replaceChild(newTag, e)
+            }
+          })
+
           this.cleanHtml
             .querySelectorAll(
-              "#Galerie, #Annexes, #Bibliographie, #Notes_et_références, #Articles_connexes, #Liens_externes, .nowrap, #bandeau-portail, [rel='mw-deduplicated-inline-style'], [title='Name at birth'], [aria-labelledby='micro-periodic-table-title'], .barbox, .wikitable, .clade, .Expand_section, .IPA, .thumb, .mw-empty-elt, .mw-editsection, .nounderlines, .nomobile, .searchaux, #toc, .sidebar, .sistersitebox, .noexcerpt, #External_links, #Further_reading, .hatnote, .haudio, .portalbox, .mw-references-wrap, .infobox, .unsolved, .navbox, .metadata, .refbegin, .reflist, .mw-stack, #Notes, #References, .reference, .quotebox, .collapsible, .uncollapsed, .mw-collapsible, .mw-made-collapsible, .mbox-small, .mbox, #coordinates, .succession-box, .noprint, .mwe-math-element, .cs1-ws-icon",
+              ".reference-cadre, #Références, #Galerie, #Annexes, #Bibliographie, #Notes_et_références, #Articles_connexes, #Liens_externes, .nowrap, #bandeau-portail, [rel='mw-deduplicated-inline-style'], [title='Name at birth'], [aria-labelledby='micro-periodic-table-title'], .barbox, .wikitable, .clade, .Expand_section, .IPA, .thumb, .mw-empty-elt, .mw-editsection, .nounderlines, .nomobile, .searchaux, #toc, .sidebar, .sistersitebox, .noexcerpt, #External_links, #Further_reading, .hatnote, .haudio, .portalbox, .mw-references-wrap, .infobox, .unsolved, .navbox, .metadata, .refbegin, .reflist, .mw-stack, #Notes, #References, .reference, .quotebox, .collapsible, .uncollapsed, .mw-collapsible, .mw-made-collapsible, .mbox-small, .mbox, #coordinates, .succession-box, .noprint, .mwe-math-element, .cs1-ws-icon",
             )
             .forEach((e) => {
               e.remove()
@@ -208,24 +219,6 @@ export default defineComponent({
           // Unwrap headline parents
           this.cleanHtml.querySelectorAll('.mw-headline').forEach((e) => {
             e.replaceWith(...e.childNodes)
-          })
-
-          //Handle times
-          this.cleanHtml.querySelectorAll('time').forEach((e) => {
-            // if (e.getAttribute('datetime') === null) {
-            //   console.log(e.parentNode?.firstChild)
-            // }
-            const replace = new Date(
-              (e.getAttribute('datetime')
-                ? e.getAttribute('datetime')
-                : '') as string,
-            )
-            var newTag = document.createTextNode(
-              replace.toLocaleDateString('fr-FR'),
-            )
-            if (e.firstChild) {
-              e.parentNode?.replaceChild(newTag, e)
-            }
           })
 
           var titleHolder = this.cleanHtml.createElement('h1')
@@ -287,11 +280,11 @@ export default defineComponent({
           })
 
           // Load saved words AND commons words
-          let previousWords: string[];
+          let previousWords: string[]
           if (isLoading) {
-           previousWords = this.previousGuess.map((data) => {
-            return data.guess
-          });
+            previousWords = this.previousGuess.map((data) => {
+              return data.guess
+            })
           }
           this.cleanHtml.querySelectorAll('span.innertxt').forEach((e) => {
             const txt = e.innerHTML
@@ -300,8 +293,8 @@ export default defineComponent({
               .toLowerCase()
 
             if (isLoading && previousWords.indexOf(txt) >= 0) {
-              this.previousGuess[previousWords.indexOf(txt)]?.list.push(e);
-              return;
+              this.previousGuess[previousWords.indexOf(txt)]?.list.push(e)
+              return
             }
 
             if (!commonWords.includes(txt) && e.firstElementChild === null) {
@@ -310,7 +303,7 @@ export default defineComponent({
                 e,
                 original: e.innerHTML,
               })
-              e.innerHTML = '█'.repeat(e.innerHTML.length)
+              // e.innerHTML = '█'.repeat(e.innerHTML.length)
             }
           })
 
@@ -321,9 +314,9 @@ export default defineComponent({
               .toLowerCase()
               .replace('_', '')
               .replace(' ', '')
-          });
+          })
 
-          this.$emit('load', this.previousGuess);
+          this.$emit('load', this.previousGuess)
           this.isReady = true
 
           setTimeout(() => {

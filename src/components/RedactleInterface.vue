@@ -2,7 +2,7 @@
 import RedactleInput from '@/components/RedactleInput.vue'
 import RedactleArticle from '@/components/RedactleArticle.vue'
 import { defineComponent } from 'vue'
-import { DateTime } from "luxon";
+import { DateTime } from 'luxon'
 </script>
 
 <script lang="ts">
@@ -18,24 +18,42 @@ export default defineComponent({
     return {
       guess: '',
       guesses: new Array<Guess>(),
-      superHighlighted: document.createElement("div") as Element,
+      superHighlighted: document.createElement('div') as Element,
+      redactusNumber: 0,
       focus: '',
       index: 0,
     }
   },
   created() {
-    if (localStorage.getItem('currentTime')) {
-      const currentTime = DateTime.fromISO(localStorage.getItem('currentTime') as string);
-      if (DateTime.now().day !== currentTime.day) {
-        localStorage.clear();
+    const diff = DateTime.fromObject({ day: 13, month: 5, year: 2022 })
+      .diffNow('days')
+      .toObject().days as number
+    this.redactusNumber = Math.floor(Math.abs(diff ? +diff : 0))
+
+    if (localStorage.getItem('currentRedactus')) {
+      if (
+        this.redactusNumber !==
+        +(localStorage.getItem('currentRedactus') as string)
+      ) {
+        localStorage.removeItem('guesses')
       }
     }
-    localStorage.setItem('currentTime', DateTime.now().toISODate());
+    localStorage.setItem('currentRedactus', this.redactusNumber.toString())
+
+    if (localStorage.getItem('currentTime')) {
+      const currentTime = DateTime.fromISO(
+        localStorage.getItem('currentTime') as string,
+      )
+      if (DateTime.now().day !== currentTime.day) {
+        localStorage.removeItem('guesses')
+      }
+    }
+    localStorage.setItem('currentTime', DateTime.now().toISODate())
   },
   methods: {
     // /!\ BAD
     handleLoad(event: any): void {
-      this.guesses = event;
+      this.guesses = event
     },
     inputUpdated(event: string): void {
       this.guess = event
@@ -51,16 +69,20 @@ export default defineComponent({
       })
 
       if (!isDuplicate) {
-        this.guesses.push(event);
-        this.focusWord(event);
-        localStorage.setItem('guesses', JSON.stringify(this.guesses.map((guess) => {
-          return {guess: guess.guess, count: guess.count};
-        })));
-      };
-
+        this.guesses.push(event)
+        this.focusWord(event)
+        localStorage.setItem(
+          'guesses',
+          JSON.stringify(
+            this.guesses.map((guess) => {
+              return { guess: guess.guess, count: guess.count }
+            }),
+          ),
+        )
+      }
     },
     handleWin(): void {
-      this.superHighlighted.classList.remove('superHighlighted');
+      this.superHighlighted.classList.remove('superHighlighted')
     },
     goToTop(): void {
       window.scrollTo(0, 0)
@@ -78,10 +100,10 @@ export default defineComponent({
       ] as HTMLElement
 
       // Highlight
-      this.superHighlighted.classList.remove('superHighlighted');
-      this.superHighlighted.classList.remove('highlighted');
-      element.classList.add('superHighlighted');
-      this.superHighlighted = element;
+      this.superHighlighted.classList.remove('superHighlighted')
+      this.superHighlighted.classList.remove('highlighted')
+      element.classList.add('superHighlighted')
+      this.superHighlighted = element
 
       // Scroll
       window.scrollTo(0, element.offsetTop - 120)
@@ -93,7 +115,9 @@ export default defineComponent({
 <template>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-      <span class="navbar-brand mb-0 h1 mx-4">Redactus</span>
+      <span class="navbar-brand mb-0 h1 mx-4">
+        REDACTUS #{{ redactusNumber }}
+      </span>
       <button
         class="navbar-toggler mx-2"
         type="button"
