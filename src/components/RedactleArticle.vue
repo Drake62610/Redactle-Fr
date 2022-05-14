@@ -124,15 +124,11 @@ export default defineComponent({
     }
 
     try {
-      // const name = 'Henry_Ford
-      console.log(this.name);
       if (!this.name) {
         throw Error("Article Name not found");
       }
       this.articleName = this.name.replace('%27', "'")
       .split(/[_']+/);
-      console.log(this.articleName);
-
 
       await axios
         .get<{ parse: { text: string } }>(

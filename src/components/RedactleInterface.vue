@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import RedactleInput from '@/components/RedactleInput.vue'
 import RedactleArticle from '@/components/RedactleArticle.vue'
+import RedactleInterface from '@/components/RedactleArticle.vue'
 import { defineComponent } from 'vue'
 import { DateTime } from 'luxon'
 import { redactus } from '@/assets/redactus'
+import RedactleStats from './RedactleStats.vue'
 </script>
 
 <script lang="ts">
@@ -14,6 +16,7 @@ type Guess = {
 }
 
 export default defineComponent({
+  components: { RedactleStats },
   name: 'RedactleInterface',
   data() {
     return {
@@ -22,6 +25,7 @@ export default defineComponent({
       superHighlighted: document.createElement('div') as Element,
       redactusNumber: 0,
       redactusSolution: new String(),
+      hasWon: false,
       focus: '',
       index: 0,
     }
@@ -86,6 +90,7 @@ export default defineComponent({
     },
     handleWin(): void {
       this.superHighlighted.classList.remove('superHighlighted')
+      this.hasWon = true;
     },
     goToTop(): void {
       window.scrollTo(0, 0)
@@ -161,6 +166,9 @@ export default defineComponent({
         </template>
       </table>
     </nav>
+    <template v-if="hasWon">
+      <RedactleStats />
+    </template>
 
     <div v-if="redactusSolution" class="container container-lg wikiHolder">
       <RedactleArticle
