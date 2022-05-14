@@ -33,7 +33,8 @@ export default defineComponent({
     localStorage.setItem('currentTime', DateTime.now().toISODate());
   },
   methods: {
-    handleLoad(event: Guess[]): void {
+    // /!\ BAD
+    handleLoad(event: any): void {
       this.guesses = event;
     },
     inputUpdated(event: string): void {
