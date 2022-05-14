@@ -13,6 +13,7 @@ export default defineComponent({
   props: {
     guess: String,
     focus: String,
+    name: String
   },
   data() {
     return {
@@ -123,12 +124,19 @@ export default defineComponent({
     }
 
     try {
-      const name = 'Henry_Ford'
-      this.articleName = name.split('_')
+      // const name = 'Henry_Ford
+      console.log(this.name);
+      if (!this.name) {
+        throw Error("Article Name not found");
+      }
+      this.articleName = this.name.replace('%27', "'")
+      .split(/[_']+/);
+      console.log(this.articleName);
+
 
       await axios
         .get<{ parse: { text: string } }>(
-          `https://fr.wikipedia.org/w/api.php?action=parse&format=json&page=${name}&prop=text&formatversion=2&origin=*`,
+          `https://fr.wikipedia.org/w/api.php?action=parse&format=json&page=${this.name}&prop=text&formatversion=2&origin=*`,
         )
         .then((res) => {
           if (res.status !== 200) {
@@ -173,7 +181,6 @@ export default defineComponent({
 
           //Handle times before deleting .nowrap classes
           this.cleanHtml.querySelectorAll('time').forEach((e) => {
-            console.log(e.innerText)
             var newTag = document.createTextNode(e.innerText)
             if (e.firstChild) {
               e.parentNode?.replaceChild(newTag, e)
@@ -303,7 +310,7 @@ export default defineComponent({
                 e,
                 original: e.innerHTML,
               })
-              // e.innerHTML = '█'.repeat(e.innerHTML.length)
+              e.innerHTML = '█'.repeat(e.innerHTML.length)
             }
           })
 
