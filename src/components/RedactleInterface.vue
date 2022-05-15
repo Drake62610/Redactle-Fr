@@ -3,18 +3,16 @@ import RedactleInput from '@/components/RedactleInput.vue'
 import RedactleArticle from '@/components/RedactleArticle.vue'
 import RedactleInterface from '@/components/RedactleArticle.vue'
 import RedactleStats from './RedactleStats.vue'
+import type { Guess } from '@/model/guess.data'
+import type { UserStats } from '@/model/user-stats.data'
+
 import { defineComponent } from 'vue'
 import { DateTime } from 'luxon'
 import { redactus } from '@/assets/redactus'
+import DBService from '@/services/db.service'
 </script>
 
 <script lang="ts">
-type Guess = {
-  guess: string
-  count: number
-  list: HTMLElement[]
-}
-
 export default defineComponent({
   name: 'RedactleInterface',
   data() {
@@ -27,14 +25,24 @@ export default defineComponent({
       hasWon: false,
       focus: '',
       index: 0,
+      isReady: false
     }
   },
-  created() {
+  async created() {
     const diff = DateTime.fromObject({ day: 13, month: 5, year: 2022 })
       .diffNow('days')
       .toObject().days as number
     this.redactusNumber = Math.floor(Math.abs(diff ? +diff : 0))
-    this.redactusSolution = redactus[this.redactusNumber - 1] as string;
+    this.redactusSolution = redactus[this.redactusNumber - 1] as string
+
+    // await this.db.createObjectStore(['stats'])
+    // const allWords = (await this.db.getAllValue('stats')) as UserStats[]
+    // if (
+    //   allWords.length &&
+    //   allWords.map((e) => e.word).includes(this.redactusSolution as string)
+    // ) {
+    //   this.hasWon = true
+    // }
 
     if (localStorage.getItem('currentRedactus')) {
       if (
@@ -55,6 +63,7 @@ export default defineComponent({
       }
     }
     localStorage.setItem('currentTime', DateTime.now().toISODate())
+
   },
   methods: {
     // /!\ BAD
@@ -65,6 +74,9 @@ export default defineComponent({
       this.guess = event
     },
     handleGuesses(event: Guess): void {
+      if (this.hasWon) {
+        return
+      }
       let isDuplicate = false
       this.guesses.forEach((guess) => {
         if (guess.guess === event.guess) {
@@ -89,7 +101,7 @@ export default defineComponent({
     },
     handleWin(): void {
       this.superHighlighted.classList.remove('superHighlighted')
-      this.hasWon = true;
+      this.hasWon = true
     },
     goToTop(): void {
       window.scrollTo(0, 0)
@@ -115,6 +127,9 @@ export default defineComponent({
       // Scroll
       window.scrollTo(0, element.offsetTop - 120)
     },
+    switchReady():void {
+      this.isReady = true;
+    }
   },
 })
 </script>
@@ -165,18 +180,27 @@ export default defineComponent({
         </template>
       </table>
     </nav>
-    <template v-if="hasWon">
-      <RedactleStats />
+    <template v-if="hasWon && isReady">
+      <RedactleStats
+        :redactusNumber="redactusNumber"
+        :redactusSolution="redactusSolution"
+        :guesses="guesses"
+      />
     </template>
 
-    <div v-if="redactusSolution !==''" class="container container-lg wikiHolder">
+    <div
+      v-if="redactusSolution !== ''"
+      class="container container-lg wikiHolder"
+    >
       <RedactleArticle
         @load="handleLoad"
         @update="handleGuesses"
         @win="handleWin"
+        @isReady="switchReady"
         :name="redactusSolution"
         :guess="guess"
         :focus="focus"
+        :hasWon="hasWon"
       />
     </div>
 

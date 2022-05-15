@@ -13,7 +13,8 @@ export default defineComponent({
   props: {
     guess: String,
     focus: String,
-    name: String
+    name: String,
+    hasWon: Boolean,
   },
   data() {
     return {
@@ -120,10 +121,9 @@ export default defineComponent({
 
     try {
       if (!this.name) {
-        throw Error("Article Name not found");
+        throw Error('Article Name not found')
       }
-      this.articleName = this.name.replace('%27', "'")
-      .split(/[_']+/);
+      this.articleName = this.name.replace('%27', "'").split(/[_']+/)
 
       await axios
         .get<{ parse: { text: string } }>(
@@ -301,7 +301,9 @@ export default defineComponent({
                 e,
                 original: e.innerHTML,
               })
-              e.innerHTML = '█'.repeat(e.innerHTML.length)
+              if (!this.hasWon) {
+                e.innerHTML = '█'.repeat(e.innerHTML.length)
+              }
             }
           })
 
@@ -315,6 +317,7 @@ export default defineComponent({
           })
 
           this.$emit('load', this.previousGuess)
+          this.$emit('isReady')
           this.isReady = true
 
           setTimeout(() => {

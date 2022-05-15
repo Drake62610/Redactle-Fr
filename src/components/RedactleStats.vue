@@ -1,28 +1,90 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
+import DBService from '@/services/db.service'
+
+import type { Guess } from '@/model/guess.data'
+import type { UserStats } from '@/model/user-stats.data'
 
 export default defineComponent({
   props: {
-    redactusNumber: String,
+    redactusNumber: Number,
     redactusSolution: String,
-    name: String,
+  },
+  data() {
+    return {
+      db: new DBService('redactus'),
+      guesses: new Array<Guess>(),
+      hits: 0,
+      consecutive: 0,
+      isReady: false,
+    }
+  },
+  async created() {
+    this.guesses = JSON.parse(localStorage.getItem('guesses') as string)
+    this.hits = this.guesses.filter((e) => {
+      return e.count !== 0
+    }).length
+
+    await this.db.createObjectStore(['stats'])
+
+    this.consecutive = await this.computeConsecutive()
+
+    const allWords = (await this.db.getAllValue('stats')) as UserStats[]
+
+    if (
+      !allWords.length ||
+      !allWords.map((e) => e.word).includes(this.redactusSolution as string)
+    ) {
+      await this.db.putValue('stats', {
+        number: this.redactusNumber,
+        word: this.redactusSolution,
+        hits: this.hits,
+        accuracy: Math.round((this.hits / this.guesses.length) * 100),
+      })
+    }
+    this.isReady = true
   },
   methods: {
-      shareResults(){
-          return;
+    async computeConsecutive(): Promise<number> {
+      const allValue = (await this.db.getAllValue('stats')) as UserStats[]
+      if (allValue.length < 2) {
+        return 0
       }
-  }
+
+      let consecutive = 0
+      let currentNumber = allValue.reverse()[0].number
+      allValue.reverse().every((data) => {
+        if (currentNumber - data.number === 1) {
+          currentNumber = data.number
+          consecutive++
+        }
+        if (currentNumber - data.number > 1) return false
+      })
+      return consecutive
+    },
+    shareResults() {
+      return
+    },
+  },
 })
 </script>
 
 <template>
   <div class="container container-lg" style="display: block;">
-    <h3>Félicitation vous avez résolu le Redactus #2 (BETA)!</h3>
-    <ul>
-      <li>La réponse était: Néerlandais</li>
-      <!-- <li>You solved it in 1 guesses</li>
-      <li>Your accuracy was 100.00%</li>
-      <li>You have solved 1 consecutive Redactles</li> -->
+    <h3>
+      Félicitation vous avez résolu le Redactus #{{
+        this.redactusNumber
+      }}
+      (BETA)!
+    </h3>
+    <ul v-if="isReady">
+      <li>La réponse était: {{ this.redactusSolution }}</li>
+      <li>Vous avez résolu le rédactus en {{ guesses.length }} essaies</li>
+      <li>
+        Votre précision était
+        {{ Math.round((this.hits / this.guesses.length) * 100) }}%
+      </li>
+      <li>Vous avez résolu {{ this.consecutive }} Redactus consécutif</li>
     </ul>
     <!-- <h3>Global Stats</h3> -->
     <!-- <ul>
@@ -33,4 +95,3 @@ export default defineComponent({
     <!-- <p><a @click="shareResults">Share your results</a></p> -->
   </div>
 </template>
-
