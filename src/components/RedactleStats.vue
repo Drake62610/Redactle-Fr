@@ -73,18 +73,18 @@ export default defineComponent({
   <div class="container container-lg" style="display: block;">
     <h3>
       Félicitation vous avez résolu le Redactus #{{
-        this.redactusNumber
+        redactusNumber
       }}
       (BETA)!
     </h3>
     <ul v-if="isReady">
-      <li>La réponse était: {{ this.redactusSolution }}</li>
+      <li>La réponse était: {{ redactusSolution }}</li>
       <li>Vous avez résolu le rédactus en {{ guesses.length }} essaies</li>
       <li>
         Votre précision était
-        {{ Math.round((this.hits / this.guesses.length) * 100) }}%
+        {{ Math.round((hits / guesses.length) * 100) }}%
       </li>
-      <li>Vous avez résolu {{ this.consecutive }} Redactus consécutif</li>
+      <li>Vous avez résolu {{ consecutive }} Redactus consécutif</li>
     </ul>
     <!-- <h3>Global Stats</h3> -->
     <!-- <ul>
