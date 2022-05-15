@@ -2,10 +2,10 @@
 import RedactleInput from '@/components/RedactleInput.vue'
 import RedactleArticle from '@/components/RedactleArticle.vue'
 import RedactleInterface from '@/components/RedactleArticle.vue'
+import RedactleStats from './RedactleStats.vue'
 import { defineComponent } from 'vue'
 import { DateTime } from 'luxon'
 import { redactus } from '@/assets/redactus'
-import RedactleStats from './RedactleStats.vue'
 </script>
 
 <script lang="ts">
@@ -16,7 +16,6 @@ type Guess = {
 }
 
 export default defineComponent({
-  components: { RedactleStats },
   name: 'RedactleInterface',
   data() {
     return {
@@ -24,7 +23,7 @@ export default defineComponent({
       guesses: new Array<Guess>(),
       superHighlighted: document.createElement('div') as Element,
       redactusNumber: 0,
-      redactusSolution: new String(),
+      redactusSolution: '',
       hasWon: false,
       focus: '',
       index: 0,
@@ -35,7 +34,7 @@ export default defineComponent({
       .diffNow('days')
       .toObject().days as number
     this.redactusNumber = Math.floor(Math.abs(diff ? +diff : 0))
-    this.redactusSolution = redactus[this.redactusNumber - 1]
+    this.redactusSolution = redactus[this.redactusNumber - 1] as string;
 
     if (localStorage.getItem('currentRedactus')) {
       if (
@@ -170,7 +169,7 @@ export default defineComponent({
       <RedactleStats />
     </template>
 
-    <div v-if="redactusSolution" class="container container-lg wikiHolder">
+    <div v-if="redactusSolution !==''" class="container container-lg wikiHolder">
       <RedactleArticle
         @load="handleLoad"
         @update="handleGuesses"

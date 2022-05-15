@@ -67,11 +67,6 @@ export default defineComponent({
             count++
             list.push(matchGuess.e)
           })
-        // [...document.getElementsByClassName('innerTxt')]
-        // .forEach((element) => {
-        //   console.log(element);
-        //   element.classList.add("highlighted");
-        // })
         this.$emit('update', {
           guess: value,
           count,
