@@ -21,11 +21,13 @@
     "portal-vue": "^2.1.7",
     "vue": "^3.2.33",
     "vue-axios": "^3.4.1",
+    "vue-final-modal": "^3.4.4",
     "vue-router": "^4.0.14"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.0",
     "@types/axios": "^0.14.0",
+    "@types/bootstrap": "^5.1.11",
     "@types/jquery": "^3.5.14",
     "@types/luxon": "^2.3.2",
     "@types/node": "^16.11.27",

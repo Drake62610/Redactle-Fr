@@ -28,3 +28,6 @@ coverage
 *.sln
 *.sw?
 .vscode
+
+server.csr
+myserver.key
