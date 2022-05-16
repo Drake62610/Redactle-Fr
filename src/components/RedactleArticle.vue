@@ -39,6 +39,7 @@ export default defineComponent({
       this.articleName = this.articleName.filter(
         (articleWord) => articleWord !== value,
       )
+      console.log(this.articleName);
       const hasWon = !this.articleName.length
 
       if (this.baffled) {
@@ -312,9 +313,11 @@ export default defineComponent({
               .normalize('NFD')
               .replace(/[\u0300-\u036f]/g, '')
               .toLowerCase()
-              .replace('_', '')
               .replace(' ', '')
+              .replace(')', '')
+              .replace(/[_'\(]+/, '')
           })
+          console.log(this.articleName)
 
           this.$emit('load', this.previousGuess)
           this.$emit('isReady')
