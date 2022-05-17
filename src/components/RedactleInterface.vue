@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import RedactleInput from '@/components/RedactleInput.vue'
 import RedactleArticle from '@/components/RedactleArticle.vue'
-import RedactleInterface from '@/components/RedactleArticle.vue'
 import RedactleStats from './RedactleStats.vue'
+import TwitchIntegration from '@/components/TwitchIntegration.vue'
 import CustomModal from './CustomModal.vue'
 import type { Guess } from '@/model/guess.data'
 import type { UserStats } from '@/model/user-stats.data'
@@ -28,6 +28,10 @@ export default defineComponent({
       index: 0,
       isReady: false,
       showStats: false,
+      twitchMode: false,
+      twitchInput: '',
+      twitchChannel: '',
+      twitchGuess: { user: '', message: '' },
     }
   },
   async created() {
@@ -67,6 +71,19 @@ export default defineComponent({
     localStorage.setItem('currentTime', DateTime.now().toISODate())
   },
   methods: {
+    // Twich Mode Methods
+    enabletwitchMode(): void {
+      this.twitchMode = !this.twitchMode
+    },
+    updateStreamerName(): void {
+      if (this.twitchInput === '') {
+        return
+      }
+      this.twitchChannel = this.twitchInput
+    },
+    inputTwitchUpdated(event: { user: string; message: string }): void {
+      this.twitchGuess = event
+    },
     triggerStats(): void {
       this.showStats = !this.showStats
     },
@@ -84,7 +101,9 @@ export default defineComponent({
       let isDuplicate = false
       this.guesses.forEach((guess) => {
         if (guess.guess === event.guess) {
-          this.focusWord(event)
+          if (!event.user) {
+            this.focusWord(event)
+          }
           isDuplicate = true
           return
         }
@@ -92,7 +111,9 @@ export default defineComponent({
 
       if (!isDuplicate) {
         this.guesses.push(event)
-        this.focusWord(event)
+        if (!event.user) {
+          this.focusWord(event)
+        }
         localStorage.setItem(
           'guesses',
           JSON.stringify(
@@ -111,6 +132,8 @@ export default defineComponent({
       window.scrollTo(0, 0)
     },
     focusWord(input: Guess): void {
+      console.log('Focus')
+      console.log(input)
       if (!input.count) {
         return
       }
@@ -139,6 +162,32 @@ export default defineComponent({
 </script>
 <template>
   <body>
+    <template>
+      <component
+        :is="'script'"
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1578220624296803"
+        crossorigin="anonymous"
+      ></component>
+      <!-- Test -->
+      <ins
+        class="adsbygoogle"
+        style="display: block;"
+        data-ad-client="ca-pub-1578220624296803"
+        data-ad-slot="6125916261"
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      ></ins>
+      <component :is="'script'">
+        ;(adsbygoogle = window.adsbygoogle || []).push({})
+      </component>
+    </template>
+
+    <TwitchIntegration
+      v-if="twitchChannel != ''"
+      @twitchGuess="inputTwitchUpdated"
+      :twitchChannel="twitchChannel"
+    />
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
       <span class="navbar-brand mb-0 h1 mx-4">
         REDACTUS #{{ redactusNumber }}
@@ -149,11 +198,42 @@ export default defineComponent({
             <a class="nav-link mx-2" href="#" id="infoBtn">Info</a>
           </li> -->
           <li class="nav-item">
-            <a class="nav-link mx-2" @click="triggerStats" style="cursor: pointer;">Stats</a>
+            <a
+              class="nav-link mx-2"
+              @click="triggerStats"
+              style="cursor: pointer;"
+            >
+              Stats
+            </a>
           </li>
           <!-- <li class="nav-item">
             <a class="nav-link mx-2" href="#" id="settingsBtn">Settings</a>
           </li> -->
+          <li class="nav-item">
+            <label class="nav-link mx-2">
+              <a style="cursor: pointer;" @click="enabletwitchMode()">
+                Twitch Mode
+              </a>
+            </label>
+          </li>
+          <li class="nav-item" v-if="twitchMode">
+            <input
+              type="text"
+              class="form-text-lg"
+              autofocus
+              autocomplete="on"
+              placeholder="DrakeLeLionBlanc"
+              v-model="twitchInput"
+              @keyup.enter="updateStreamerName()"
+            />
+            <button
+              @click="updateStreamerName()"
+              class="btn btn-outline-secondary"
+              type="button"
+            >
+              Go
+            </button>
+          </li>
         </ul>
       </div>
       <button
@@ -175,6 +255,7 @@ export default defineComponent({
         <thead>
           <tr>
             <th scope="col">#</th>
+            <th v-if="twitchMode" scope="col">UserName</th>
             <th scope="col">Guess</th>
             <th scope="col">Hits</th>
           </tr>
@@ -189,6 +270,7 @@ export default defineComponent({
               @click="focusWord(item)"
             >
               <td># {{ guesses.length - index }}</td>
+              <td v-if="twitchMode">{{ item.user ? item.user : 'streamer' }}</td>
               <td>{{ item.guess }}</td>
               <td>{{ item.count }}</td>
             </tr>
@@ -206,27 +288,6 @@ export default defineComponent({
         :guesses="guesses"
       />
     </template>
-
-    <div>
-      <component
-        :is="'script'"
-        async
-        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1578220624296803"
-        crossorigin="anonymous"
-      ></component>
-      <!-- Test -->
-      <ins
-        class="adsbygoogle"
-        style="display: block;"
-        data-ad-client="ca-pub-1578220624296803"
-        data-ad-slot="6125916261"
-        data-ad-format="auto"
-        data-full-width-responsive="true"
-      ></ins>
-      <component :is="'script'">
-        ;(adsbygoogle = window.adsbygoogle || []).push({})
-      </component>
-    </div>
     <div
       v-if="redactusSolution !== ''"
       class="container container-lg wikiHolder"
@@ -240,12 +301,14 @@ export default defineComponent({
         :guess="guess"
         :focus="focus"
         :hasWon="hasWon"
+        :twitchGuess="twitchGuess"
       />
     </div>
-
-    <div class="bg-dark fixed-bottom">
-      <RedactleInput @update="inputUpdated" @top="goToTop" />
-    </div>
+    <template v-if="isReady">
+      <div class="bg-dark fixed-bottom">
+        <RedactleInput @update="inputUpdated" @top="goToTop" />
+      </div>
+    </template>
   </body>
 </template>
 

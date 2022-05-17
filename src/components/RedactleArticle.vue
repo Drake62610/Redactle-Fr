@@ -9,9 +9,19 @@ type Guess = {
   list: Element[]
 }
 
+class TwitchGuess {
+  user: string
+  message: string
+  constructor() {
+    this.user = '',
+    this.message = ''
+  }
+}
+
 export default defineComponent({
   props: {
     guess: String,
+    twitchGuess: Object,
     focus: String,
     name: String,
     hasWon: Boolean,
@@ -39,7 +49,6 @@ export default defineComponent({
       this.articleName = this.articleName.filter(
         (articleWord) => articleWord !== value,
       )
-      console.log(this.articleName);
       const hasWon = !this.articleName.length
 
       if (this.baffled) {
@@ -71,6 +80,39 @@ export default defineComponent({
           })
         this.$emit('update', {
           guess: value,
+          count,
+          list,
+        })
+
+        if (hasWon) {
+          this.$emit('win')
+        }
+      }
+    },
+    twitchGuess(value: TwitchGuess) {
+      let count = 0
+
+      // Check if not already guessed
+      this.articleName = this.articleName.filter(
+        (articleWord) => articleWord !== value.message,
+      )
+      const hasWon = !this.articleName.length
+
+      if (this.baffled) {
+        // Reveal word
+        const list: Element[] = []
+        this.baffled
+          .filter((baffle) => {
+            return baffle.formatedString === value.message || hasWon
+          })
+          .forEach((matchGuess) => {
+            matchGuess.e.innerHTML = matchGuess.original
+            count++
+            list.push(matchGuess.e)
+          })
+        this.$emit('update', {
+          guess: value.message,
+          user: value.user,
           count,
           list,
         })
@@ -317,7 +359,6 @@ export default defineComponent({
               .replace(')', '')
               .replace(/[_'\(]+/, '')
           })
-          console.log(this.articleName)
 
           this.$emit('load', this.previousGuess)
           this.$emit('isReady')
