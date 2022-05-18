@@ -173,7 +173,6 @@ export default defineComponent({
         style="display: block;"
         data-ad-client="ca-pub-1578220624296803"
         data-ad-slot="6125916261"
-        data-ad-format="auto"
         data-full-width-responsive="true"
       ></ins>
       <component :is="'script'">
