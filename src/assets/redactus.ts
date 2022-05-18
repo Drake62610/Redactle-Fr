@@ -1,8 +1,9 @@
 export const redactus = [
-  "SGVucnlfRm9yZA==",
+  "SGVucnlfRm9yZA==", 
   "TullcmxhbmRhaXM=",
   "UHVua19oYXJkY29yZQ",
-  "TWFyZ2VfU2ltcHNvbg==",
+  "QnJlYWtpbmdfQmFk",
+  "TWFyZ2VfU2ltcHNvbg==", //4
   "QW50aHJvcG9sb2dpZQ==",
   "UuljaGF1ZmZlbWVudF9jbGltYXRpcXVl",
   // Bug

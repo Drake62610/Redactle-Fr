@@ -81,5 +81,6 @@ export const commonWords = [
   "la",
   "du",
   "des",
-  "l", "d", "a", "en", "les", "s", "ils", "c", "n", "elle"
+  "l", "d", "a", "en", "les", "s", "ils", "c", "n", "elle",
+  "son", "sa"
 ]

@@ -132,8 +132,6 @@ export default defineComponent({
       window.scrollTo(0, 0)
     },
     focusWord(input: Guess): void {
-      console.log('Focus')
-      console.log(input)
       if (!input.count) {
         return
       }
@@ -266,7 +264,7 @@ export default defineComponent({
             :key="item.guess"
           >
             <tr
-              :class="{ 'table-secondary': item.guess === focus }"
+              :class="{ 'table-secondary': item.guess === focus, 'success': item.count > 0}"
               @click="focusWord(item)"
             >
               <td># {{ guesses.length - index }}</td>
