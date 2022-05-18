@@ -66,13 +66,44 @@ export default defineComponent({
           Adapté et maintenu par
           <a href="https://www.twitter.com/Drake62610">DrakeLeLionBlanc</a>
         </p>
-        <li><a href="https://github.com/Drake62610/Redactle-Fr">GitHub</a> Pour ceux qui veulent apporter leurs aide</li>
-        <li><a href="https://www.twitch.tv/DrakeLeLionBlanc">Twitch</a> Pour faire un coucou et echanger directement</li>
-        <li><a href="https://www.twitter.com/Drake62610">Twitter Pour suivre mon "actu"</a></li>
+        <li>
+          <a href="https://github.com/Drake62610/Redactle-Fr">GitHub</a>
+          Pour ceux qui veulent apporter leurs aide
+        </li>
+        <li>
+          <a href="https://www.twitch.tv/DrakeLeLionBlanc">Twitch</a>
+          Pour faire un coucou et echanger directement
+        </li>
+        <li>
+          <a href="https://www.twitter.com/Drake62610">
+            Twitter Pour suivre mon "actu"
+          </a>
+        </li>
         <h2>Astuces</h2>
-        <li>Chaque tentative doit être un mot unique, les mots composé d'un trait d'union sont considéré comme deux mots par rédactus. Par exemple pour révéler "passe-droit" il faudra deviner "passe" puis "droit".</li>
+        <li>
+          Chaque tentative doit être un mot unique, les mots composé d'un trait
+          d'union sont considéré comme deux mots par rédactus. Par exemple pour
+          révéler "passe-droit" il faudra deviner "passe" puis "droit".
+        </li>
         <li>Ne vous souciez pas des accents et majuscules.</li>
-        <li>Pour proposer une astuce, contactez moi via les liens utiles ci-dessus.</li>
+        <li>
+          Pour proposer une astuce, contactez moi via les liens utiles
+          ci-dessus.
+        </li>
+        <br />
+        <h2>Mode Twitch</h2>
+        <p>
+          En activant le mode Twitch il vous faudra juste indiquer votre nom de
+          chaine pour permettre à votre Chat de jouer avec vous. Une fois activé
+          en utilisant la commande !word votre chat commencera à submit des mots
+          dans votre session de Redactus.
+        </p>
+        <p>
+          Pour des raisons de praticité et afin que le streamer ne perdent pas
+          la main l'auto surlignage et l'autoscroll des éléments trouvé est
+          désactivé. Le streamer devra donc jouer son rôle d'animateur en
+          montrant les itterations des différents mots trouvé à son chat.
+        </p>
       </div>
     </vue-final-modal>
   </div>
