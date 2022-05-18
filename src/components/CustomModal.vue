@@ -78,7 +78,16 @@ export default defineComponent({
   border-radius: 0.25rem;
   background: #212529;
   color: #989898;
+  overflow: scroll;
+  height: 40rem;
 }
+
+@media (min-width: 992px) {
+  ::v-deep(.modal-content) {
+    margin: 0 12rem;
+  }
+}
+
 .modal__title {
   font-size: 1.5rem;
   font-weight: 700;

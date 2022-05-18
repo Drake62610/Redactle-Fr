@@ -4,6 +4,7 @@ import RedactleArticle from '@/components/RedactleArticle.vue'
 import RedactleStats from './RedactleStats.vue'
 import TwitchIntegration from '@/components/TwitchIntegration.vue'
 import CustomModal from './CustomModal.vue'
+import RedactleInfo from './RedactleInfo.vue'
 import type { Guess } from '@/model/guess.data'
 import type { UserStats } from '@/model/user-stats.data'
 
@@ -28,6 +29,7 @@ export default defineComponent({
       index: 0,
       isReady: false,
       showStats: false,
+      showInfo: false,
       twitchMode: false,
       twitchInput: '',
       twitchChannel: '',
@@ -86,6 +88,9 @@ export default defineComponent({
     },
     triggerStats(): void {
       this.showStats = !this.showStats
+    },
+    triggerInfo(): void {
+      this.showInfo = !this.showInfo
     },
     // /!\ BAD
     handleLoad(event: any): void {
@@ -191,9 +196,15 @@ export default defineComponent({
       </span>
       <div class="collapse navbar-collapse ms-5" id="navbarNav">
         <ul class="navbar-nav">
-          <!-- <li class="nav-item">
-            <a class="nav-link mx-2" href="#" id="infoBtn">Info</a>
-          </li> -->
+          <li class="nav-item">
+            <a
+              class="nav-link mx-2"
+              @click="triggerInfo"
+              style="cursor: pointer;"
+            >
+              Info
+            </a>
+          </li>
           <li class="nav-item">
             <a
               class="nav-link mx-2"
@@ -277,6 +288,7 @@ export default defineComponent({
     </nav>
 
     <CustomModal v-if="isReady" :enabled="showStats" />
+    <RedactleInfo v-if="isReady" :enabled="showInfo" />
 
     <template v-if="hasWon && isReady">
       <RedactleStats
