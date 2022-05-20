@@ -4,7 +4,7 @@ export const redactus = [
   "UHVua19oYXJkY29yZQ",
   "TWFyZ2VfU2ltcHNvbg==", // 4 Marge
   "QW50aHJvcG9sb2dpZQ==", // 5 Anthro
-  "UuljaGF1ZmZlbWVudF9jbGltYXRpcXVl", //6Clima
+  "UuljaGF1ZmZlbWVudF9jbGltYXRpcXVl", //6 Clima
   "WmFra19XeWxkZQ==", // 7 Zakk wyle /li bug
   "QmFyYmVfTm9pcmU=", //8 Barbe Noire ressources showed
   "UmVtYnJhbmR0", // 9 Rembrandt /li bug

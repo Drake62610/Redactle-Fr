@@ -13,8 +13,7 @@ class TwitchGuess {
   user: string
   message: string
   constructor() {
-    this.user = '',
-    this.message = ''
+    ;(this.user = ''), (this.message = '')
   }
 }
 
@@ -193,25 +192,33 @@ export default defineComponent({
             e.replaceWith(...e.childNodes)
           })
 
-          // Remove Annexe
-          this.cleanHtml
-            .querySelector('#Articles_connexes')
-            ?.parentElement?.nextElementSibling?.remove()
-          this.cleanHtml
-            .querySelector('#Liens_externes')
-            ?.parentElement?.nextElementSibling?.remove()
-          this.cleanHtml
-            .querySelector('#Galerie')
-            ?.parentElement?.nextElementSibling?.remove()
-          this.cleanHtml
-            .querySelector('#Notes_et_références')
-            ?.parentElement?.nextElementSibling?.remove()
-          this.cleanHtml
-            .querySelector('#Bibliographie')
-            ?.parentElement?.nextElementSibling?.remove()
-          this.cleanHtml
-            .querySelector('#Références')
-            ?.parentElement?.nextElementSibling?.remove()
+          let deletableElement = this.cleanHtml.querySelector(
+            '#Annexes',
+          ) as HTMLElement
+          if (this.cleanHtml.querySelector('#Annexes')) {
+            deletableElement = this.cleanHtml.querySelector(
+              '#Annexes',
+            ) as HTMLElement
+          } else if (this.cleanHtml.querySelector('#Notes_et_références')) {
+            deletableElement = this.cleanHtml.querySelector(
+              '#Notes_et_références',
+            ) as HTMLElement
+          } else if (this.cleanHtml.querySelector('#Voir_aussi')) {
+            deletableElement = this.cleanHtml.querySelector(
+              '#Voir_aussi',
+            ) as HTMLElement
+          }
+          deletableElement = deletableElement.parentElement as HTMLElement
+
+          if (deletableElement) {
+            while (deletableElement?.nextElementSibling) {
+              const element = deletableElement
+              deletableElement = deletableElement.nextElementSibling as HTMLElement
+              console.log(deletableElement)
+
+              element.remove()
+            }
+          }
 
           //Handle times before deleting .nowrap classes
           this.cleanHtml.querySelectorAll('time').forEach((e) => {

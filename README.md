@@ -1,6 +1,8 @@
-# redactle-fr
+# A Redactle like game in French with Twich Extension
 
-This template should help get you started developing with Vue 3 in Vite.
+Version live : https://redactus.lion-blanc.com
+
+twitch.tv/DrakeLeLionBlanc
 
 ## Recommended IDE Setup
 

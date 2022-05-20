@@ -34,7 +34,13 @@ export default defineComponent({
       twitchInput: '',
       twitchChannel: '',
       twitchGuess: { user: '', message: '' },
+      adsenseContent: '',
     }
+  },
+  mounted() {
+    this.adsenseContent = document.getElementById('divadsensedisplaynone')
+      ?.innerHTML as string
+    console.log(this.adsenseContent)
   },
   async created() {
     const diff = DateTime.fromObject({ day: 13, month: 5, year: 2022 })
@@ -42,7 +48,6 @@ export default defineComponent({
       .toObject().days as number
     this.redactusNumber = Math.floor(Math.abs(diff ? +diff : 0))
     this.redactusSolution = redactus[this.redactusNumber - 1] as string
-
     // await this.db.createObjectStore(['stats'])
     // const allWords = (await this.db.getAllValue('stats')) as UserStats[]
     // if (
@@ -123,7 +128,11 @@ export default defineComponent({
           'guesses',
           JSON.stringify(
             this.guesses.map((guess) => {
-              return { guess: guess.guess, count: guess.count }
+              return {
+                guess: guess.guess,
+                count: guess.count,
+                user: guess.user,
+              }
             }),
           ),
         )
@@ -165,26 +174,6 @@ export default defineComponent({
 </script>
 <template>
   <body>
-    <template>
-      <component
-        :is="'script'"
-        async
-        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1578220624296803"
-        crossorigin="anonymous"
-      ></component>
-      <!-- Test -->
-      <ins
-        class="adsbygoogle"
-        style="display: block;"
-        data-ad-client="ca-pub-1578220624296803"
-        data-ad-slot="6125916261"
-        data-full-width-responsive="true"
-      ></ins>
-      <component :is="'script'">
-        ;(adsbygoogle = window.adsbygoogle || []).push({})
-      </component>
-    </template>
-
     <TwitchIntegration
       v-if="twitchChannel != ''"
       @twitchGuess="inputTwitchUpdated"
@@ -274,11 +263,16 @@ export default defineComponent({
             :key="item.guess"
           >
             <tr
-              :class="{ 'table-secondary': item.guess === focus, 'success': item.count > 0}"
+              :class="{
+                'table-secondary': item.guess === focus,
+                success: item.count > 0,
+              }"
               @click="focusWord(item)"
             >
               <td># {{ guesses.length - index }}</td>
-              <td v-if="twitchMode">{{ item.user ? item.user : 'streamer' }}</td>
+              <td v-if="twitchMode">
+                {{ item.user ? item.user : 'streamer' }}
+              </td>
               <td>{{ item.guess }}</td>
               <td>{{ item.count }}</td>
             </tr>
@@ -286,21 +280,27 @@ export default defineComponent({
         </template>
       </table>
     </nav>
-
-    <CustomModal v-if="isReady" :enabled="showStats" />
-    <RedactleInfo v-if="isReady" :enabled="showInfo" />
-
+    <div
+      id="adsgoeshere"
+      style="background: #1d1f29; padding-top: 60px; text-align: center;"
+      v-html="adsenseContent"
+    ></div>
     <template v-if="hasWon && isReady">
-      <RedactleStats
-        :redactusNumber="redactusNumber"
-        :redactusSolution="redactusSolution"
-        :guesses="guesses"
-      />
-    </template>
+        <RedactleStats
+          :redactusNumber="redactusNumber"
+          :redactusSolution="redactusSolution"
+          :guesses="guesses"
+        />
+      </template>
     <div
       v-if="redactusSolution !== ''"
       class="container container-lg wikiHolder"
     >
+      <CustomModal v-if="isReady" :enabled="showStats" />
+      <RedactleInfo v-if="isReady" :enabled="showInfo" />
+
+      
+
       <RedactleArticle
         @load="handleLoad"
         @update="handleGuesses"

@@ -18,9 +18,8 @@ export const commonWords = [
   "avant",
   'que',
   'derrière',
-  'en dessous',
-  'en dessous',
-  'à côté',
+  'en',
+  'à',
   'entre',
   'delà',
   'mais',
@@ -82,5 +81,5 @@ export const commonWords = [
   "du",
   "des",
   "l", "d", "a", "en", "les", "s", "ils", "c", "n", "elle",
-  "son", "sa"
+  "son", "sa", "qu", "y"
 ]

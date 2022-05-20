@@ -14,17 +14,17 @@ export default defineComponent({
     return {
       db: new DBService('redactus'),
       guesses: new Array<Guess>(),
-      hits: 0,
+      correctHits: 0,
       consecutive: 0,
+      share: false,
       isReady: false,
     }
   },
   async created() {
     this.guesses = JSON.parse(localStorage.getItem('guesses') as string)
-    this.hits = this.guesses.filter((e) => {
+    this.correctHits = this.guesses.filter((e) => {
       return e.count !== 0
     }).length
-
     await this.db.createObjectStore(['stats'])
 
     this.consecutive = await this.computeConsecutive()
@@ -38,8 +38,8 @@ export default defineComponent({
       await this.db.putValue('stats', {
         number: this.redactusNumber,
         word: this.redactusSolution,
-        hits: this.hits,
-        accuracy: Math.round((this.hits / this.guesses.length) * 100),
+        hits: this.guesses.length,
+        accuracy: Math.round((this.correctHits / this.guesses.length) * 100),
       })
     }
     this.isReady = true
@@ -62,8 +62,8 @@ export default defineComponent({
       })
       return consecutive
     },
-    shareResults() {
-      return
+    triggerShare() {
+      this.share = !this.share
     },
   },
 })
@@ -72,9 +72,7 @@ export default defineComponent({
 <template>
   <div class="container container-lg" style="display: block;">
     <h3>
-      Félicitation vous avez résolu le Redactus #{{
-        redactusNumber
-      }}
+      Félicitation vous avez résolu le Redactus #{{ redactusNumber }}
       (BETA)!
     </h3>
     <ul v-if="isReady">
@@ -82,16 +80,95 @@ export default defineComponent({
       <li>Vous avez résolu le rédactus en {{ guesses.length }} essaies</li>
       <li>
         Votre précision était
-        {{ Math.round((hits / guesses.length) * 100) }}%
+        {{ Math.round((this.correctHits / this.guesses.length) * 100) }}%
       </li>
       <li>Vous avez résolu {{ consecutive }} Redactus consécutif</li>
     </ul>
-    <!-- <h3>Global Stats</h3> -->
-    <!-- <ul>
-      <li>Globally, 5909 players have solved today's Redactle so far</li>
-      <li>Global Median: 73.00 Guesses; 60.58% Accuracy</li>
-      <li>Global Average: 92.04 Guesses; 61.37% Accuracy</li>
-    </ul> -->
-    <!-- <p><a @click="shareResults">Share your results</a></p> -->
+
+    <div class="share-button sharer" style="display: block;">
+      <button
+        @click="triggerShare"
+        type="button"
+        class="btn btn-success share-btn"
+      >
+        Share
+      </button>
+      <div
+        class="social top center networks-5"
+        :class="{ active: share === true }"
+      >
+        <!-- Facebook Share Button -->
+        <!-- <a
+          class="fbtn share facebook"
+          href="https://www.facebook.com/sharer/sharer.php?u=url"
+        >
+          <i class="fa fa-facebook"></i>
+        </a> -->
+
+        <!-- Twitter Share Button -->
+        <a
+          class="fbtn share twitter"
+          :href="'https://twitter.com/intent/tweet?text='+ encodeURIComponent('Redactus #' + redactusNumber + '\nRésolue en ' +guesses.length +'essaies avec une précision de '+Math.round((this.correctHits / this.guesses.length) * 100) +' %\n\nTrouve le titre de cet article Wikipédia obfuscé ! #Redactus\nhttps://redactus.lion-blanc.com')"
+        >
+          <i class="fa fa-twitter"></i>
+        </a>
+      </div>
+    </div>
   </div>
 </template>
+
+<style scoped>
+.social .fbtn {
+  width: 50px;
+  display: inline-block;
+  color: #fff;
+  text-align: center;
+  line-height: 18px;
+  float: left;
+}
+.social .fa {
+  padding: 15px 0px;
+}
+.facebook {
+  background-color: #3b5998;
+}
+.gplus {
+  background-color: #dd4b39;
+}
+.twitter {
+  background-color: #55acee;
+}
+.stumbleupon {
+  background-color: #eb4924;
+}
+.pinterest {
+  background-color: #cc2127;
+}
+.linkedin {
+  background-color: #0077b5;
+}
+.buffer {
+  background-color: #323b43;
+}
+.share-button.sharer {
+  height: 20px;
+}
+.share-button.sharer .social.active.top {
+  transform: scale(1) translateY(-10px);
+}
+.share-button.sharer .social.active {
+  opacity: 1;
+  transition: all 0.4s ease 0s;
+  visibility: visible;
+}
+.share-button.sharer .social.top {
+  margin-top: -80px;
+  transform-origin: 0 0 0;
+}
+.share-button.sharer .social {
+  margin-left: -65px;
+  opacity: 0;
+  transition: all 0.4s ease 0s;
+  visibility: hidden;
+}
+</style>

@@ -20,7 +20,7 @@ export default defineComponent({
         if (flags.broadcaster && command === 'test') {
           console.log('!test was typed in chat')
         }
-        if (command == 'word') {
+        if (command == 'word' && message.split(' ')[0] !== '') {
           this.$emit('twitchGuess', {
             user,
             message: message
