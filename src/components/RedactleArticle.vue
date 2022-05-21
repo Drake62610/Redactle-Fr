@@ -162,11 +162,6 @@ export default defineComponent({
       }
 
       this.articleName = this.name.replace('%27', "'").split(/[_']+/)
-      // if (route.params.customName) {
-      //   this.articleName = atob(route.params.customName as string)
-      //     .replace('%27', "'")
-      //     .split(/[_']+/)
-      // }
 
       await axios
         .get<{ parse: { text: string } }>(
@@ -188,7 +183,6 @@ export default defineComponent({
             .replace(/–/g, '-')
             .replace(/<audio.*<\/audio>/g, '')
           this.cleanHtml = parser.parseFromString(cleanText, 'text/html')
-
           this.cleanHtml.querySelectorAll('small').forEach((e) => {
             e.replaceWith(...e.childNodes)
           })
@@ -227,21 +221,20 @@ export default defineComponent({
               e.parentNode?.replaceChild(newTag, e)
             }
           })
-
           this.cleanHtml
             .querySelectorAll(
-              "#Voir_aussi, .reference-cadre, #Références, #Galerie, #Annexes, #Bibliographie, #Notes_et_références, #Articles_connexes, #Liens_externes, .nowrap, #bandeau-portail, [rel='mw-deduplicated-inline-style'], [title='Name at birth'], [aria-labelledby='micro-periodic-table-title'], .barbox, .wikitable, .clade, .Expand_section, .IPA, .thumb, .mw-empty-elt, .mw-editsection, .nounderlines, .nomobile, .searchaux, #toc, .sidebar, .sistersitebox, .noexcerpt, #External_links, #Further_reading, .hatnote, .haudio, .portalbox, .mw-references-wrap, .infobox, .unsolved, .navbox, .metadata, .refbegin, .reflist, .mw-stack, #Notes, #References, .reference, .quotebox, .collapsible, .uncollapsed, .mw-collapsible, .mw-made-collapsible, .mbox-small, .mbox, #coordinates, .succession-box, .noprint, .mwe-math-element, .cs1-ws-icon",
+              ".NavFrame, #Voir_aussi, .reference-cadre, #Références, #Galerie, #Annexes, #Bibliographie, #Notes_et_références, #Articles_connexes, #Liens_externes, .nowrap, #bandeau-portail, [rel='mw-deduplicated-inline-style'], [title='Name at birth'], [aria-labelledby='micro-periodic-table-title'], .barbox, .wikitable, .clade, .Expand_section, .IPA, .thumb, .mw-empty-elt, .mw-editsection, .nounderlines, .nomobile, .searchaux, #toc, .sidebar, .sistersitebox, .noexcerpt, #External_links, #Further_reading, .hatnote, .haudio, .portalbox, .mw-references-wrap, .infobox, .unsolved, .navbox, .metadata, .refbegin, .reflist, .mw-stack, #Notes, #References, .reference, .quotebox, .collapsible, .uncollapsed, .mw-collapsible, .mw-made-collapsible, .mbox-small, .mbox, #coordinates, .succession-box, .noprint, .mwe-math-element, .cs1-ws-icon",
             )
             .forEach((e) => {
               e.remove()
             })
 
           // Handle anchors
-          this.emptyHTMLCollection(this.cleanHtml.getElementsByTagName('a'))
-          this.emptyHTMLCollection(this.cleanHtml.getElementsByTagName('i'))
-          this.emptyHTMLCollection(this.cleanHtml.getElementsByTagName('b'))
-          this.emptyHTMLCollection(this.cleanHtml.getElementsByTagName('abbr'))
-          this.emptyHTMLCollection(this.cleanHtml.getElementsByTagName('sub'))
+          // this.emptyHTMLCollection(this.cleanHtml.getElementsByTagName('a'))
+          // this.emptyHTMLCollection(this.cleanHtml.getElementsByTagName('i'))
+          // this.emptyHTMLCollection(this.cleanHtml.getElementsByTagName('b'))
+          // this.emptyHTMLCollection(this.cleanHtml.getElementsByTagName('abbr'))
+          // this.emptyHTMLCollection(this.cleanHtml.getElementsByTagName('sub'))
 
           // // Handle quotes
           var bq = this.cleanHtml.getElementsByTagName('blockquote')
@@ -293,35 +286,39 @@ export default defineComponent({
             .replace(/ \(\) /g, ' ')
             .replace(/<\/?span[^>]*>/g, '')
             .replace(/&nbsp;/g, ' ')
+
           this.cleanHtml.querySelectorAll('*').forEach((e) => {
             e.removeAttribute('class')
             e.removeAttribute('style')
           })
-          ;[
-            ...this.cleanHtml.querySelectorAll(
-              'p, blockquote, h1, h2, h3, table, li, i, cite, span',
-            ),
-          ].forEach((e) => {
-            if (e.firstChild) {
-            }
-            e.innerHTML = e.innerHTML.replace(
-              /([\.,:()\[\]?!;`\~\-\u2013\—&*"'«»%’/])/g,
-              '<span class="punctuation">$1</span>',
+
+          // Warning
+          this.cleanHtml
+            .querySelectorAll(
+              'p, blockquote, h1, h2, h3, table, li, i, cite, span, dl',
             )
-          }),
-            (this.cleanHtml.body.innerHTML = this.cleanHtml.body.innerHTML
-              .replace(/&lt;/g, '')
-              .replace(/&gt;/g, '')
-              .replace(/(<style.*<\/style>)/g, '')
-              .replace(
-                /(<span class="punctuation">.<\/span>)|(^|<\/?[^>]+>|\s+)|([^\s<]+)/g,
-                '$1$2<span class="innerTxt">$3</span>',
-              )
-              .replace(
-                '<<span class="innerTxt">h1>',
-                '<h1><span class="innerTxt">',
-              )
-              .replace(/(<!--.*?-->)|(<!--[\S\s]+?-->)|(<!--[\S\s]*?$)/g, ''))
+            .forEach((e) => {
+              if (e.firstChild) {
+                (e as HTMLElement).innerHTML = (e as HTMLElement).innerText.replace(
+                  /([\.,:()\[\]?!;`\~\-\u2013\—&*"'«»%’/])/g,
+                  '<span class="punctuation">$1</span>',
+                )
+              }
+            })
+
+          this.cleanHtml.body.innerHTML = this.cleanHtml.body.innerHTML
+            .replace(/&lt;/g, '')
+            .replace(/&gt;/g, '')
+            .replace(/(<style.*<\/style>)/g, '')
+            .replace(
+              /(<span class="punctuation">.<\/span>)|(^|<\/?[^>]+>|\s+)|([^\s<]+)/g,
+              '$1$2<span class="innerTxt">$3</span>',
+            )
+            .replace(
+              '<<span class="innerTxt">h1>',
+              '<h1><span class="innerTxt">',
+            )
+            .replace(/(<!--.*?-->)|(<!--[\S\s]+?-->)|(<!--[\S\s]*?$)/g, '')
 
           this.cleanHtml.querySelectorAll('*:empty, style').forEach((e) => {
             e.remove()
@@ -335,18 +332,18 @@ export default defineComponent({
             })
           }
           this.articleName = this.articleName
-          .map((word) => {
-            return word
-              .normalize('NFD')
-              .replace(/[\u0300-\u036f]/g, '')
-              .toLowerCase()
-              .replace(' ', '')
-              .replace(')', '')
-              .replace(/[_'\(]+/, '')
-          })
-          .filter((word) => {
-            return !commonWords.includes(word)
-          })
+            .map((word) => {
+              return word
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .toLowerCase()
+                .replace(' ', '')
+                .replace(')', '')
+                .replace(/[_'\(]+/, '')
+            })
+            .filter((word) => {
+              return !commonWords.includes(word)
+            })
 
           // Check if previous guess lead to win
           let hasWon = false
@@ -407,6 +404,7 @@ export default defineComponent({
       while (e.length) {
         let parent = e[0].parentNode
         while (e[0].firstChild) {
+          console.log(parent);
           parent?.insertBefore(e[0].firstChild, e[0])
         }
         parent?.removeChild(e[0])
