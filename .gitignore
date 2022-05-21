@@ -31,3 +31,4 @@ coverage
 
 server.csr
 myserver.key
+*.env
