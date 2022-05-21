@@ -7,6 +7,8 @@ export const redactus = [
   "UuljaGF1ZmZlbWVudF9jbGltYXRpcXVl", //6 Clima
   "WmFra19XeWxkZQ==", // 7 Zakk wyle /li bug
   "QmFyYmVfTm9pcmU=", //8 Barbe Noire ressources showed
+  "T3B0aXF1ZV9n6W9t6XRyaXF1ZQ==", // Optique Geometrique
+  "RnJleWph", // Freya
   "UmVtYnJhbmR0", // 9 Rembrandt /li bug
   "UHJvcGFnYW5kZQ==", // 10 propagande / li bug
   // Bug

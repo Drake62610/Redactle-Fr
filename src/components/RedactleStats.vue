@@ -80,95 +80,109 @@ export default defineComponent({
       <li>Vous avez résolu le rédactus en {{ guesses.length }} essaies</li>
       <li>
         Votre précision était
-        {{ Math.round((this.correctHits / this.guesses.length) * 100) }}%
+        {{ Math.round((correctHits / guesses.length) * 100) }}%
       </li>
       <li>Vous avez résolu {{ consecutive }} Redactus consécutif</li>
     </ul>
 
-    <div class="share-button sharer" style="display: block;">
-      <button
-        @click="triggerShare"
-        type="button"
-        class="btn btn-success share-btn"
-      >
-        Share
-      </button>
+    <!-- Sharingbutton Twitter -->
+    <a
+      class="resp-sharing-button__link"
+      :href="
+        'https://twitter.com/intent/tweet?text=' +
+        encodeURIComponent(
+          'Redactus #' +
+            redactusNumber +
+            '\nRésolu en ' +
+            guesses.length +
+            'essaies avec une précision de ' +
+            Math.round((correctHits / guesses.length) * 100) +
+            ' %\n\nTrouve le titre de cet article Wikipédia obfuscé ! #Redactus\nhttps://redactus.lion-blanc.com',
+        )
+      "
+      target="_blank"
+      rel="noopener"
+      aria-label="Share on Twitter"
+    >
       <div
-        class="social top center networks-5"
-        :class="{ active: share === true }"
+        class="resp-sharing-button resp-sharing-button--twitter resp-sharing-button--large"
       >
-        <!-- Facebook Share Button -->
-        <!-- <a
-          class="fbtn share facebook"
-          href="https://www.facebook.com/sharer/sharer.php?u=url"
+        <div
+          aria-hidden="true"
+          class="resp-sharing-button__icon resp-sharing-button__icon--solid"
         >
-          <i class="fa fa-facebook"></i>
-        </a> -->
-
-        <!-- Twitter Share Button -->
-        <a
-          class="fbtn share twitter"
-          :href="'https://twitter.com/intent/tweet?text='+ encodeURIComponent('Redactus #' + redactusNumber + '\nRésolue en ' +guesses.length +'essaies avec une précision de '+Math.round((this.correctHits / this.guesses.length) * 100) +' %\n\nTrouve le titre de cet article Wikipédia obfuscé ! #Redactus\nhttps://redactus.lion-blanc.com')"
-        >
-          <i class="fa fa-twitter"></i>
-        </a>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path
+              d="M23.44 4.83c-.8.37-1.5.38-2.22.02.93-.56.98-.96 1.32-2.02-.88.52-1.86.9-2.9 1.1-.82-.88-2-1.43-3.3-1.43-2.5 0-4.55 2.04-4.55 4.54 0 .36.03.7.1 1.04-3.77-.2-7.12-2-9.36-4.75-.4.67-.6 1.45-.6 2.3 0 1.56.8 2.95 2 3.77-.74-.03-1.44-.23-2.05-.57v.06c0 2.2 1.56 4.03 3.64 4.44-.67.2-1.37.2-2.06.08.58 1.8 2.26 3.12 4.25 3.16C5.78 18.1 3.37 18.74 1 18.46c2 1.3 4.4 2.04 6.97 2.04 8.35 0 12.92-6.92 12.92-12.93 0-.2 0-.4-.02-.6.9-.63 1.96-1.22 2.56-2.14z"
+            />
+          </svg>
+        </div>
+        Share on Twitter
       </div>
-    </div>
+    </a>
   </div>
 </template>
 
 <style scoped>
-.social .fbtn {
-  width: 50px;
+.resp-sharing-button__link,
+.resp-sharing-button__icon {
   display: inline-block;
+}
+
+.resp-sharing-button__link {
+  text-decoration: none;
   color: #fff;
-  text-align: center;
-  line-height: 18px;
-  float: left;
+  margin: 0.5em;
 }
-.social .fa {
-  padding: 15px 0px;
+
+.resp-sharing-button {
+  border-radius: 5px;
+  transition: 25ms ease-out;
+  padding: 0.5em 0.75em;
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
 }
-.facebook {
-  background-color: #3b5998;
+
+.resp-sharing-button__icon svg {
+  width: 1em;
+  height: 1em;
+  margin-right: 0.4em;
+  vertical-align: top;
 }
-.gplus {
-  background-color: #dd4b39;
+
+.resp-sharing-button--small svg {
+  margin: 0;
+  vertical-align: middle;
 }
-.twitter {
+
+/* Non solid icons get a stroke */
+.resp-sharing-button__icon {
+  stroke: #fff;
+  fill: none;
+}
+
+/* Solid icons get a fill */
+.resp-sharing-button__icon--solid,
+.resp-sharing-button__icon--solidcircle {
+  fill: #fff;
+  stroke: none;
+}
+
+.resp-sharing-button--twitter {
   background-color: #55acee;
 }
-.stumbleupon {
-  background-color: #eb4924;
+
+.resp-sharing-button--twitter:hover {
+  background-color: #2795e9;
 }
-.pinterest {
-  background-color: #cc2127;
+
+.resp-sharing-button--twitter {
+  background-color: #55acee;
+  border-color: #55acee;
 }
-.linkedin {
-  background-color: #0077b5;
-}
-.buffer {
-  background-color: #323b43;
-}
-.share-button.sharer {
-  height: 20px;
-}
-.share-button.sharer .social.active.top {
-  transform: scale(1) translateY(-10px);
-}
-.share-button.sharer .social.active {
-  opacity: 1;
-  transition: all 0.4s ease 0s;
-  visibility: visible;
-}
-.share-button.sharer .social.top {
-  margin-top: -80px;
-  transform-origin: 0 0 0;
-}
-.share-button.sharer .social {
-  margin-left: -65px;
-  opacity: 0;
-  transition: all 0.4s ease 0s;
-  visibility: hidden;
+
+.resp-sharing-button--twitter:hover,
+.resp-sharing-button--twitter:active {
+  background-color: #2795e9;
+  border-color: #2795e9;
 }
 </style>

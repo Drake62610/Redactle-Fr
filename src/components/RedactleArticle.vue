@@ -23,7 +23,6 @@ export default defineComponent({
     twitchGuess: Object,
     focus: String,
     name: String,
-    hasWon: Boolean,
   },
   data() {
     return {
@@ -45,10 +44,7 @@ export default defineComponent({
       let count = 0
 
       // Check if not already guessed
-      this.articleName = this.articleName.filter(
-        (articleWord) => articleWord !== value,
-      )
-      const hasWon = !this.articleName.length
+      const hasWon = this.checkIfWin(value)
 
       if (this.baffled) {
         // Remove Highlight
@@ -91,11 +87,7 @@ export default defineComponent({
     twitchGuess(value: TwitchGuess) {
       let count = 0
 
-      // Check if not already guessed
-      this.articleName = this.articleName.filter(
-        (articleWord) => articleWord !== value.message,
-      )
-      const hasWon = !this.articleName.length
+      const hasWon = this.checkIfWin(value.message)
 
       if (this.baffled) {
         // Reveal word
@@ -214,7 +206,6 @@ export default defineComponent({
             while (deletableElement?.nextElementSibling) {
               const element = deletableElement
               deletableElement = deletableElement.nextElementSibling as HTMLElement
-              console.log(deletableElement)
 
               element.remove()
             }
@@ -334,28 +325,6 @@ export default defineComponent({
               return data.guess
             })
           }
-          this.cleanHtml.querySelectorAll('span.innertxt').forEach((e) => {
-            const txt = e.innerHTML
-              .normalize('NFD')
-              .replace(/[\u0300-\u036f]/g, '')
-              .toLowerCase()
-
-            if (isLoading && previousWords.indexOf(txt) >= 0) {
-              this.previousGuess[previousWords.indexOf(txt)]?.list.push(e)
-              return
-            }
-
-            if (!commonWords.includes(txt) && e.firstElementChild === null) {
-              this.baffled.push({
-                formatedString: txt,
-                e,
-                original: e.innerHTML,
-              })
-              if (!this.hasWon) {
-                e.innerHTML = '█'.repeat(e.innerHTML.length)
-              }
-            }
-          })
 
           this.articleName = this.articleName.map((word) => {
             return word
@@ -367,6 +336,38 @@ export default defineComponent({
               .replace(/[_'\(]+/, '')
           })
 
+          // Check if previous guess lead to win
+          let hasWon = false
+          if (isLoading) {
+            this.previousGuess.map((data) => {
+              hasWon = this.checkIfWin(data.guess)
+            })
+            if (hasWon) {
+                this.$emit('win')
+            }
+          }
+
+          this.cleanHtml.querySelectorAll('span.innertxt').forEach((e) => {
+            const txt = e.innerHTML
+              .normalize('NFD')
+              .replace(/[\u0300-\u036f]/g, '')
+              .toLowerCase()
+
+            if (isLoading && previousWords.indexOf(txt) >= 0) {
+              this.previousGuess[previousWords.indexOf(txt)]?.list.push(e)
+              return
+            }
+            if (!commonWords.includes(txt) && e.firstElementChild === null) {
+              this.baffled.push({
+                formatedString: txt,
+                e,
+                original: e.innerHTML,
+              })
+              if (!hasWon) {
+                e.innerHTML = '█'.repeat(e.innerHTML.length)
+              }
+            }
+          })
           this.$emit('load', this.previousGuess)
           this.$emit('isReady')
           this.isReady = true
@@ -384,6 +385,12 @@ export default defineComponent({
     }
   },
   methods: {
+    checkIfWin(value: string): boolean {
+      this.articleName = this.articleName.filter(
+        (articleWord) => articleWord !== value,
+      )
+      return !this.articleName.length
+    },
     emptyHTMLCollection(e: HTMLCollectionOf<HTMLElement>) {
       while (e.length) {
         let parent = e[0].parentNode

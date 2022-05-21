@@ -40,7 +40,6 @@ export default defineComponent({
   mounted() {
     this.adsenseContent = document.getElementById('divadsensedisplaynone')
       ?.innerHTML as string
-    console.log(this.adsenseContent)
   },
   async created() {
     const diff = DateTime.fromObject({ day: 13, month: 5, year: 2022 })
@@ -48,14 +47,6 @@ export default defineComponent({
       .toObject().days as number
     this.redactusNumber = Math.floor(Math.abs(diff ? +diff : 0))
     this.redactusSolution = redactus[this.redactusNumber - 1] as string
-    // await this.db.createObjectStore(['stats'])
-    // const allWords = (await this.db.getAllValue('stats')) as UserStats[]
-    // if (
-    //   allWords.length &&
-    //   allWords.map((e) => e.word).includes(this.redactusSolution as string)
-    // ) {
-    //   this.hasWon = true
-    // }
 
     if (localStorage.getItem('currentRedactus')) {
       if (
@@ -309,7 +300,6 @@ export default defineComponent({
         :name="redactusSolution"
         :guess="guess"
         :focus="focus"
-        :hasWon="hasWon"
         :twitchGuess="twitchGuess"
       />
     </div>
