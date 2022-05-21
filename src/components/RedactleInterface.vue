@@ -12,9 +12,11 @@ import { defineComponent } from 'vue'
 import { DateTime } from 'luxon'
 import { redactus } from '@/assets/redactus'
 import DBService from '@/services/db.service'
+import { useRoute } from 'vue-router'
 </script>
 
 <script lang="ts">
+
 export default defineComponent({
   name: 'RedactleInterface',
   data() {
@@ -31,6 +33,7 @@ export default defineComponent({
       showStats: false,
       showInfo: false,
       twitchMode: false,
+      customMode: false,
       twitchInput: '',
       twitchChannel: '',
       twitchGuess: { user: '', message: '' },
@@ -42,6 +45,12 @@ export default defineComponent({
       ?.innerHTML as string
   },
   async created() {
+    const route = useRoute()
+    if (route.params.customName) {
+      this.customMode = true
+      this.redactusSolution = atob(route.params.customName as string)
+      return;
+    }
     const diff = DateTime.fromObject({ day: 13, month: 5, year: 2022 })
       .diffNow('days')
       .toObject().days as number
@@ -109,11 +118,14 @@ export default defineComponent({
           return
         }
       })
-
       if (!isDuplicate) {
         this.guesses.push(event)
         if (!event.user) {
           this.focusWord(event)
+        }
+        if (this.customMode) {
+          // If custom, do not store locally
+          return;
         }
         localStorage.setItem(
           'guesses',
@@ -171,11 +183,22 @@ export default defineComponent({
       :twitchChannel="twitchChannel"
     />
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-      <span class="navbar-brand mb-0 h1 mx-4">
+      <span v-if="!customMode" class="navbar-brand mb-0 h1 mx-4">
         REDACTUS #{{ redactusNumber }}
+      </span>
+      <span v-if="customMode" class="navbar-brand mb-0 h1 mx-4">
+        REDACTUS CUSTOM
       </span>
       <div class="collapse navbar-collapse ms-5" id="navbarNav">
         <ul class="navbar-nav">
+          <li class="nav-item">
+            <a
+            class="nav-link mx-2"
+              href="/"
+            >
+              Home
+            </a>
+          </li>
           <li class="nav-item">
             <a
               class="nav-link mx-2"
@@ -277,20 +300,19 @@ export default defineComponent({
       v-html="adsenseContent"
     ></div>
     <template v-if="hasWon && isReady">
-        <RedactleStats
-          :redactusNumber="redactusNumber"
-          :redactusSolution="redactusSolution"
-          :guesses="guesses"
-        />
-      </template>
+      <RedactleStats
+        :redactusNumber="redactusNumber"
+        :redactusSolution="redactusSolution"
+        :customMode="customMode"
+        :guesses="guesses"
+      />
+    </template>
     <div
       v-if="redactusSolution !== ''"
       class="container container-lg wikiHolder"
     >
       <CustomModal v-if="isReady" :enabled="showStats" />
       <RedactleInfo v-if="isReady" :enabled="showInfo" />
-
-      
 
       <RedactleArticle
         @load="handleLoad"

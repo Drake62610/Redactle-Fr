@@ -4,7 +4,8 @@ import RedactleInterface from '@/components/RedactleInterface.vue'
 </script>
 
 <template>
-  <RedactleInterface />
+  <router-view />
+  <!-- <RedactleInterface /> -->
 </template>
 
 <style></style>

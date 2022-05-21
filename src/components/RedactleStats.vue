@@ -9,6 +9,7 @@ export default defineComponent({
   props: {
     redactusNumber: Number,
     redactusSolution: String,
+    customMode: Boolean
   },
   data() {
     return {
@@ -21,6 +22,9 @@ export default defineComponent({
     }
   },
   async created() {
+    if(this.customMode) {
+      return;
+    }
     this.guesses = JSON.parse(localStorage.getItem('guesses') as string)
     this.correctHits = this.guesses.filter((e) => {
       return e.count !== 0
@@ -62,15 +66,12 @@ export default defineComponent({
       })
       return consecutive
     },
-    triggerShare() {
-      this.share = !this.share
-    },
   },
 })
 </script>
 
 <template>
-  <div class="container container-lg" style="display: block;">
+  <div v-if="!customMode" class="container container-lg" style="display: block;">
     <h3>
       Félicitation vous avez résolu le Redactus #{{ redactusNumber }}
       (BETA)!
@@ -120,6 +121,21 @@ export default defineComponent({
         Share on Twitter
       </div>
     </a>
+  </div>
+  <div v-if="customMode" class="container container-lg" style="display: block;">
+    <h3>
+      Bravo vous avez résolu le Redactus Custom !
+    </h3>
+    <ul>
+      <li>La réponse était: {{ redactusSolution }}</li>
+      <!-- Support Guesses as input and not via localstorage for custom mode --> 
+      <!-- <li>Vous avez résolu le rédactus en {{ guesses.length }} essaies</li>
+      <li>
+        Votre précision était
+        {{ Math.round((correctHits / guesses.length) * 100) }}%
+      </li> -->
+    </ul>
+    
   </div>
 </template>
 

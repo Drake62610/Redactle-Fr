@@ -2,6 +2,7 @@
 import axios from 'axios'
 import { commonWords } from '@/assets/commonWords'
 import { defineComponent } from 'vue'
+import { useRoute } from 'vue-router'
 
 type Guess = {
   guess: string
@@ -143,9 +144,11 @@ export default defineComponent({
     },
   },
   async created() {
+    const route = useRoute()
+
     let isLoading = false
     // Local Storage
-    if (localStorage.getItem('guesses')) {
+    if (!route.params.customName && localStorage.getItem('guesses')) {
       this.previousGuess = JSON.parse(localStorage.getItem('guesses') as string)
       this.previousGuess.forEach((e) => {
         e.list = []
@@ -157,7 +160,13 @@ export default defineComponent({
       if (!this.name) {
         throw Error('Article Name not found')
       }
+
       this.articleName = this.name.replace('%27', "'").split(/[_']+/)
+      // if (route.params.customName) {
+      //   this.articleName = atob(route.params.customName as string)
+      //     .replace('%27', "'")
+      //     .split(/[_']+/)
+      // }
 
       await axios
         .get<{ parse: { text: string } }>(
@@ -325,8 +334,8 @@ export default defineComponent({
               return data.guess
             })
           }
-
-          this.articleName = this.articleName.map((word) => {
+          this.articleName = this.articleName
+          .map((word) => {
             return word
               .normalize('NFD')
               .replace(/[\u0300-\u036f]/g, '')
@@ -334,6 +343,9 @@ export default defineComponent({
               .replace(' ', '')
               .replace(')', '')
               .replace(/[_'\(]+/, '')
+          })
+          .filter((word) => {
+            return !commonWords.includes(word)
           })
 
           // Check if previous guess lead to win
@@ -343,7 +355,7 @@ export default defineComponent({
               hasWon = this.checkIfWin(data.guess)
             })
             if (hasWon) {
-                this.$emit('win')
+              this.$emit('win')
             }
           }
 

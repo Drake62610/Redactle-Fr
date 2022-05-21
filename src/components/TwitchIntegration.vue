@@ -17,9 +17,6 @@ export default defineComponent({
   async created() {
     if (this.twitchChannel) {
       ComfyJS.onCommand = (user, command, message, flags, extra) => {
-        if (flags.broadcaster && command === 'test') {
-          console.log('!test was typed in chat')
-        }
         if (command == 'word' && message.split(' ')[0] !== '') {
           this.$emit('twitchGuess', {
             user,
@@ -31,7 +28,6 @@ export default defineComponent({
               .replace(' ', '')
               .toLowerCase(),
           })
-          console.log(message)
         }
       }
       ComfyJS.Init(this.twitchChannel)
