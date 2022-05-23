@@ -217,9 +217,6 @@ export default defineComponent({
               Stats
             </a>
           </li>
-          <!-- <li class="nav-item">
-            <a class="nav-link mx-2" href="#" id="settingsBtn">Settings</a>
-          </li> -->
           <li class="nav-item">
             <label class="nav-link mx-2">
               <a style="cursor: pointer;" @click="enabletwitchMode()">
@@ -245,6 +242,13 @@ export default defineComponent({
               Go
             </button>
           </li>
+          <!-- <li class="nav-item">
+            <label class="nav-link mx-2">
+              <a style="cursor: pointer;" @click="$router.push('custom')">
+                Custom Mode
+              </a>
+            </label>
+          </li> -->
         </ul>
       </div>
       <button

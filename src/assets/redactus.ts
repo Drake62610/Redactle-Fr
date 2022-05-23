@@ -9,13 +9,14 @@ export const redactus = [
   "QmFyYmVfTm9pcmU=", //8 Barbe Noire ressources showed
   "T3B0aXF1ZV9n6W9t6XRyaXF1ZQ==", // Optique Geometrique
   "RnJleWph", // Freya
-  "UmVtYnJhbmR0", // 9 Rembrandt /li bug
+  "TW9k6GxlX09TSQ==",
   "UHJvcGFnYW5kZQ==", // 10 propagande / li bug
   // Bug
   "QXBwYXJlaWxfcGhvdG9ncmFwaGlxdWVfY29tcGFjdA", // Tom Sawyer formating bug
   "TGVzX0F2ZW50dXJlc19kZV9Ub21fU2F3eWVy",
   "VmFuY291dmVy",
   "RHJhcGVhdSBkZSBsYSBUdW5pc2ll", // Drapeau tunisie Bug titre remove common word
+  "UmVtYnJhbmR0", // 9 Rembrandt /li bug
   
   // Pont_du_Golden_Gate
 ].map((e) => {

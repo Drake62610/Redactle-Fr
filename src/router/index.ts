@@ -1,4 +1,5 @@
 import RedactleInterface from "@/components/RedactleInterface.vue"
+import CustomMode from "@/components/CustomMode.vue"
 import { createRouter, createWebHistory } from "vue-router";
 
 const router = createRouter({
@@ -13,6 +14,11 @@ const router = createRouter({
       path: "/custom/:customName",  // <-- notice the colon
       name: "Custom",
       component: RedactleInterface,
+    },
+    {
+      path: "/custom",  // <-- notice the colon
+      name: "CustomInterface",
+      component: CustomMode,
     },
   ],
 });

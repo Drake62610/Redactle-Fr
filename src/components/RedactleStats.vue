@@ -78,7 +78,7 @@ export default defineComponent({
     </h3>
     <ul v-if="isReady">
       <li>La réponse était: {{ redactusSolution }}</li>
-      <li>Vous avez résolu le rédactus en {{ guesses.length }} essaies</li>
+      <li>Vous avez résolu le rédactus en {{ guesses.length }} essais</li>
       <li>
         Votre précision était
         {{ Math.round((correctHits / guesses.length) * 100) }}%
@@ -96,7 +96,7 @@ export default defineComponent({
             redactusNumber +
             '\nRésolu en ' +
             guesses.length +
-            'essaies avec une précision de ' +
+            'essais avec une précision de ' +
             Math.round((correctHits / guesses.length) * 100) +
             ' %\n\nTrouve le titre de cet article Wikipédia obfuscé ! #Redactus\nhttps://redactus.lion-blanc.com',
         )
@@ -129,7 +129,7 @@ export default defineComponent({
     <ul>
       <li>La réponse était: {{ redactusSolution }}</li>
       <!-- Support Guesses as input and not via localstorage for custom mode --> 
-      <!-- <li>Vous avez résolu le rédactus en {{ guesses.length }} essaies</li>
+      <!-- <li>Vous avez résolu le rédactus en {{ guesses.length }} essais</li>
       <li>
         Votre précision était
         {{ Math.round((correctHits / guesses.length) * 100) }}%

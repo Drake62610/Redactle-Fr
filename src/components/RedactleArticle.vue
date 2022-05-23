@@ -161,8 +161,7 @@ export default defineComponent({
         throw Error('Article Name not found')
       }
 
-      this.articleName = this.name.replace('%27', "'").split(/[_']+/)
-
+      this.articleName = this.name.replace('%27', "'").split(/[_'-]+/)
       await axios
         .get<{ parse: { text: string } }>(
           `https://fr.wikipedia.org/w/api.php?action=parse&format=json&page=${this.name}&prop=text&formatversion=2&origin=*`,
@@ -292,6 +291,18 @@ export default defineComponent({
             e.removeAttribute('style')
           })
 
+          this.cleanHtml
+            .querySelectorAll(
+              'table',
+            ).forEach((e) => {
+              if (e.firstChild) {
+                console.log(e);
+                (e as HTMLElement).innerHTML = (e as HTMLElement).innerText.replace(
+                  /([\.,:()\[\]?!;`\~\-\u2013\—&*"'«»%’/])/g,
+                  '<span class="punctuation">$1</span>',
+                )
+              }
+            })
           // Warning
           this.cleanHtml
             .querySelectorAll(
