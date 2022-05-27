@@ -11,8 +11,12 @@ export const redactus = [
   "RnJleWph", // Freya
   "TW9k6GxlX09TSQ==",
   "UHJvcGFnYW5kZQ==", // 10 propagande / li bug
-  // Bug
   "QXBwYXJlaWxfcGhvdG9ncmFwaGlxdWVfY29tcGFjdA", // Tom Sawyer formating bug
+  "RGlhYmxvX0lJ",
+  "QW5uaXZlcnNhaXJl",
+  "VGl0YW5pYw==",
+
+  // Bug
   "TGVzX0F2ZW50dXJlc19kZV9Ub21fU2F3eWVy",
   "VmFuY291dmVy",
   "RHJhcGVhdSBkZSBsYSBUdW5pc2ll", // Drapeau tunisie Bug titre remove common word
