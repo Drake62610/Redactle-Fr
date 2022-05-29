@@ -17,9 +17,8 @@ export const redactus = [
   "VGl0YW5pYw==",
 
   // Bug
-  "TGVzX0F2ZW50dXJlc19kZV9Ub21fU2F3eWVy",
+  "RHJhcGVhdSBkZSBsYSBUdW5pc2ll",
   "VmFuY291dmVy",
-  "RHJhcGVhdSBkZSBsYSBUdW5pc2ll", // Drapeau tunisie Bug titre remove common word
   "UmVtYnJhbmR0", // 9 Rembrandt /li bug
   
   // Pont_du_Golden_Gate
