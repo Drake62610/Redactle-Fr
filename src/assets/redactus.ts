@@ -15,12 +15,16 @@ export const redactus = [
   "RGlhYmxvX0lJ",
   "QW5uaXZlcnNhaXJl",
   "VGl0YW5pYw==",
-
-  // Bug
   "RHJhcGVhdSBkZSBsYSBUdW5pc2ll",
-  "VmFuY291dmVy",
+  "TulidWxldXNlX2R1X0NyYWJl", // Nebuleuse du crabe
+  "TW9udHJlX+lsZWN0cmlxdWU=", // Montre electrique
+  "R3LodmVfZ+lu6XJhbGVfZGVfMTkyNl9hdV9Sb3lhdW1lLVVuaQ==", // Bug ref
+  "Qm91Y2xpZXJfYW50aeltZXV0ZQ==", // Bouclier Antiemeute
+  "Q29udGluZW50", // Continent
+  "U2FmcmFuXyjpcGljZSk=",
+  "U3RlcGhlbl9LaW5n", // Filtre ref bug Stephen 
+  "TW91dmVtZW50X3BvdXJfbCUyN2V4dGluY3Rpb25fdm9sb250YWlyZV9kZV9sJTI3aHVtYW5pdOk=", // Mouvement extinction
   "UmVtYnJhbmR0", // 9 Rembrandt /li bug
-  
   // Pont_du_Golden_Gate
 ].map((e) => {
   return atob(e);

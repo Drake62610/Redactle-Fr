@@ -242,13 +242,13 @@ export default defineComponent({
               Go
             </button>
           </li>
-          <!-- <li class="nav-item">
+          <li class="nav-item">
             <label class="nav-link mx-2">
               <a style="cursor: pointer;" @click="$router.push('custom')">
                 Custom Mode
               </a>
             </label>
-          </li> -->
+          </li>
         </ul>
       </div>
       <button
