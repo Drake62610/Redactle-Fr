@@ -100,7 +100,7 @@ export default defineComponent({
       </li>
       <div style="text-align: center;">
         <div>
-          <div class="input-group m-3" id="inGrp" style="display: grid;">
+          <div class="input-group m-3" id="inGrp" style="display: inline-flex;">
             <input
               type="text"
               class="form-text-lg"
@@ -121,7 +121,7 @@ export default defineComponent({
         </div>
         <br />
         <button v-if="wikiLink !== ''" type="button" class="btn btn-primary">
-          <a style="color: white; text-decoration: none;" :href="wikiLink">
+          <a style="color: white; text-decoration: none;" :href="wikiLink" target="_blank">
             Redactus Custom
           </a>
         </button>
