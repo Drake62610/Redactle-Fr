@@ -31,7 +31,6 @@ export default defineComponent({
       if (this.inputLink === '') {
         return
       }
-      console.log(this.wikiLink)
 
       navigator.clipboard.writeText(this.wikiLink)
     },
