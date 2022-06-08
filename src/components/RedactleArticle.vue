@@ -160,7 +160,7 @@ export default defineComponent({
       if (!this.name) {
         throw Error('Article Name not found')
       }
-      this.articleName = this.name.replace('%27', "'").split(/[_'-\s]+/)
+      this.articleName = this.name.replace('%27', "'").split(/[:_'-\s]+/)
       await axios
         .get<{ parse: { text: string } }>(
           `https://fr.wikipedia.org/w/api.php?action=parse&format=json&page=${this.name}&prop=text&formatversion=2&origin=*`,
