@@ -160,9 +160,7 @@ export default defineComponent({
       if (!this.name) {
         throw Error('Article Name not found')
       }
-      console.log(this.name)
-      this.articleName = this.name.replaceAll('%27', "'").split(/[_-\s]+/)
-      console.log(this.articleName)
+      this.articleName = decodeURI(this.name).split(/[:_'-\s]+/)
       await axios
         .get<{ parse: { text: string } }>(
           `https://fr.wikipedia.org/w/api.php?action=parse&format=json&page=${this.name}&prop=text&formatversion=2&origin=*`,
@@ -263,7 +261,7 @@ export default defineComponent({
           })
 
           var titleHolder = this.cleanHtml.createElement('h1')
-          var titleTxt = this.articleName.join(' ')
+          var titleTxt = decodeURI(this.name).replace(/[_\s]+/g, " ")
           titleHolder.innerHTML = titleTxt
           this.cleanHtml.body.prepend(titleHolder)
           let ansStr = titleTxt

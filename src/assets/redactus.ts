@@ -24,8 +24,8 @@ export const redactus = [
   "U2FmcmFuXyjpcGljZSk=",
   "U3RlcGhlbl9LaW5n", // Filtre ref bug Stephen 
   "U2FibGllcl9tYXJpbg==",
-  "SmFjcXVlc19DaGlyYWM=", //current
-  "TW91dmVtZW50X3BvdXJfbCUyN2V4dGluY3Rpb25fdm9sb250YWlyZV9kZV9sJTI3aHVtYW5pdOk=", // Mouvement extinction
+  "SmFjcXVlc19DaGlyYWM=", 
+  "TW91dmVtZW50X3BvdXJfbCUyN2V4dGluY3Rpb25fdm9sb250YWlyZV9kZV9sJTI3aHVtYW5pdOk=", // Mouvement extinction //current
   "U3Rhcl9XYXJzOl9Sb2d1ZV9TcXVhZHJvbg==",
   "UmVtYnJhbmR0", // 9 Rembrandt /li bug
   // Pont_du_Golden_Gate
