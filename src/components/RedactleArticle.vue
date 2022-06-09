@@ -188,19 +188,20 @@ export default defineComponent({
           let deletableElement = this.cleanHtml.querySelector(
             '#Annexes',
           ) as HTMLElement
-          if (this.cleanHtml.querySelector('#Annexes')) {
-            deletableElement = this.cleanHtml.querySelector(
-              '#Annexes',
-            ) as HTMLElement
-          } else if (this.cleanHtml.querySelector('#Notes_et_références')) {
+          if (this.cleanHtml.querySelector('#Notes_et_références')) {
             deletableElement = this.cleanHtml.querySelector(
               '#Notes_et_références',
+            ) as HTMLElement
+          } else if (this.cleanHtml.querySelector('#Annexes')) {
+            deletableElement = this.cleanHtml.querySelector(
+              '#Annexes',
             ) as HTMLElement
           } else if (this.cleanHtml.querySelector('#Voir_aussi')) {
             deletableElement = this.cleanHtml.querySelector(
               '#Voir_aussi',
             ) as HTMLElement
           }
+          console.log(deletableElement);
           deletableElement = deletableElement.parentElement as HTMLElement
 
           if (deletableElement) {
@@ -263,18 +264,8 @@ export default defineComponent({
           var titleHolder = this.cleanHtml.createElement('h1')
           var titleTxt = decodeURI(this.name as string).replace(/[_\s]+/g, " ")
           titleHolder.innerHTML = titleTxt
+
           this.cleanHtml.body.prepend(titleHolder)
-          let ansStr = titleTxt
-            .replace(/ *\([^)]*\) */g, '')
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
-            .toLowerCase()
-          let ans = ansStr.match(/\b(\w+)\b/g)
-          if (ans) {
-            ans = ans.filter((el) => {
-              return commonWords.indexOf(el) < 0
-            })
-          }
 
           this.cleanHtml.body.innerHTML = this.cleanHtml.body.innerHTML
             .replace(/\(; /g, '(')
@@ -314,18 +305,20 @@ export default defineComponent({
                 )
               }
             })
-
-            this.cleanHtml
-            .querySelectorAll(
-              '.punctuation',
-            ).forEach((e) => {
-              if (e.innerHTML === '(') {
-                if (e.nextElementSibling?.innerHTML === ')') {
-                  e.nextElementSibling.remove();
-                  e.remove();
-                }
-              }
-            })
+            
+            // Empty ( ) filter not working
+            // this.cleanHtml
+            // .querySelectorAll(
+            //   '.punctuation, .innerTxt',
+            // ).forEach((e) => {
+            //   if (e.innerHTML === '(') {
+            //   console.log(e.nextElementSibling)
+            //     if (e.nextSibling?.parentElement?.innerHTML === ')') {
+            //       e.nextSibling?.parentElement?.remove();
+            //       e.remove();
+            //     }
+            //   }
+            // })
 
           this.cleanHtml.body.innerHTML = this.cleanHtml.body.innerHTML
             .replace(/&lt;/g, '')
@@ -398,6 +391,7 @@ export default defineComponent({
               }
             }
           })
+
           this.$emit('load', this.previousGuess)
           this.$emit('isReady')
           this.isReady = true
