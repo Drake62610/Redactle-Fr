@@ -261,7 +261,7 @@ export default defineComponent({
           })
 
           var titleHolder = this.cleanHtml.createElement('h1')
-          var titleTxt = decodeURI(this.name).replace(/[_\s]+/g, " ")
+          var titleTxt = decodeURI(this.name as string).replace(/[_\s]+/g, " ")
           titleHolder.innerHTML = titleTxt
           this.cleanHtml.body.prepend(titleHolder)
           let ansStr = titleTxt
