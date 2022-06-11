@@ -28,6 +28,10 @@ export const redactus = [
   "TW91dmVtZW50X3BvdXJfbCUyN2V4dGluY3Rpb25fdm9sb250YWlyZV9kZV9sJTI3aHVtYW5pdOk=", // Mouvement extinction //current
   "U3Rhcl9XYXJzOl9Sb2d1ZV9TcXVhZHJvbg==",
   "UmVtYnJhbmR0", // 9 Rembrandt /li bug
+  "RnVz6WVfZGVfcHJveGltaXTp",
+  "QXNzYXNzaW5hdA==",
+  "TW91bGluLVJvdWdl",
+  "QXJzZW5hbF9kZV9WZW5pc2U=",
   // Pont_du_Golden_Gate
 ].map((e) => {
   return atob(e);
