@@ -32,6 +32,15 @@ export const redactus = [
   "QXNzYXNzaW5hdA==",
   "TW91bGluLVJvdWdl",
   "QXJzZW5hbF9kZV9WZW5pc2U=",
+  "QXJzZW5hbF9kZV9WZW5pc2U=",// bibliotheque current 34
+  "QmlibGlvdGjocXVlX25hdGlvbmFsZV9kZV9GcmFuY2U",// bibliotheque
+  "Q2F0Y2g=", // Catch
+  "QXV0b21vYmlsZQ==", // Automobile
+  "SGFycnlfUG90dGVy", // Harry Potter
+  "dW5kZWZpbmVk", // Automobile
+  "R2lyb25kZV8oZOlwYXJ0ZW1lbnQp", // Gironde
+  "TWElQzMlQUZ0JUMzJUE5", // Maite
+  "SmV1eHZpZGVvLmNvbQ==", // JVCom
   // Pont_du_Golden_Gate
 ].map((e) => {
   return atob(e);
