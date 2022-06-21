@@ -37,7 +37,7 @@ export const redactus = [
   "Q2F0Y2g=", // Catch
   "QXV0b21vYmlsZQ==", // Automobile
   "SGFycnlfUG90dGVy", // Harry Potter
-  "dW5kZWZpbmVk", // Automobile
+  "QXV0b21vYmlsZQ==", // Automobile
   "R2lyb25kZV8oZOlwYXJ0ZW1lbnQp", // Gironde
   "TWElQzMlQUZ0JUMzJUE5", // Maite
   "SmV1eHZpZGVvLmNvbQ==", // JVCom
