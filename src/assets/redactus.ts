@@ -41,6 +41,10 @@ export const redactus = [
   "R2lyb25kZV8oZOlwYXJ0ZW1lbnQp", // Gironde
   "TWElQzMlQUZ0JUMzJUE5", // Maite
   "SmV1eHZpZGVvLmNvbQ==", // JVCom
+  "Q29sb25uZV92ZXJ06WJyYWxl",
+  "UG9pbnRfY2FyZGluYWw=",
+  "Uêàz",
+  "QmlnX0Jhbmc="
   // Pont_du_Golden_Gate
 ].map((e) => {
   return atob(e);

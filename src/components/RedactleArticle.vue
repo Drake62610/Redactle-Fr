@@ -160,7 +160,7 @@ export default defineComponent({
       if (!this.name) {
         throw Error('Article Name not found')
       }
-      this.articleName = decodeURI(this.name).split(/[:_'-\s]+/)
+      this.articleName = decodeURI(this.name).split(/[:_'.-\s]+/)
       await axios
         .get<{ parse: { text: string } }>(
           `https://fr.wikipedia.org/w/api.php?action=parse&format=json&page=${this.name}&prop=text&formatversion=2&origin=*`,
@@ -358,6 +358,8 @@ export default defineComponent({
             .filter((word) => {
               return !commonWords.includes(word)
             })
+
+            console.log(this.articleName)
 
           // Check if previous guess lead to win
           let hasWon = false
