@@ -43,8 +43,14 @@ export const redactus = [
   "SmV1eHZpZGVvLmNvbQ==", // JVCom
   "Q29sb25uZV92ZXJ06WJyYWxl",
   "UG9pbnRfY2FyZGluYWw=",
-  // "Uêàz",
-  "QmlnX0Jhbmc="
+  "QmlnX0Jhbmc=",
+  "UHN5Y2hvbG9naWU=",
+  "QW50aHJvcG9tb3JwaGlzbWU=",
+  "QW1u6XNpZQ==",
+  "Q2FsZW5kcmllcg==", // Calendrier
+  "Q29xdWlsbGVfKHR5cG9ncmFwaGllKQ==",
+  "U3BlZWRydW4=",
+  "U29hcF9vcGVyYQ=="
   // Pont_du_Golden_Gate
 ].map((e) => {
   return atob(e);
