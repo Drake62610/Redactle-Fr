@@ -49,7 +49,8 @@ export const redactus = [
   "QW1u6XNpZQ==",
   "Q2FsZW5kcmllcg==", // Calendrier
   "Q29xdWlsbGVfKHR5cG9ncmFwaGllKQ==",
-  "U3BlZWRydW4=",
+  "speedrun",
+  "SW5n6W5pZXJpZV9zb2NpYWxlXyhz6WN1cml06V9kZV9sJTI3aW5mb3JtYXRpb24p",
   "U29hcF9vcGVyYQ=="
   // Pont_du_Golden_Gate
 ].map((e) => {
