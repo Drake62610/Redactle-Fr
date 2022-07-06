@@ -51,7 +51,12 @@ export const redactus = [
   "Q29xdWlsbGVfKHR5cG9ncmFwaGllKQ==",
   "speedrun",
   "SW5n6W5pZXJpZV9zb2NpYWxlXyhz6WN1cml06V9kZV9sJTI3aW5mb3JtYXRpb24p",
-  "U29hcF9vcGVyYQ=="
+  "U29hcF9vcGVyYQ==",
+  "Q29sdW1ibw==",
+  "ROl0ZWN0aXZl",
+  "Rup0ZV9kdV9DYW5hZGE=",
+  "ROlmZW5zZXVyXyhmb290YmFsbCk=",
+  "RW5jbGF2ZV9ldF9leGNsYXZl"
   // Pont_du_Golden_Gate
 ].map((e) => {
   return atob(e);
