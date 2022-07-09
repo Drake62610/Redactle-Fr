@@ -55,7 +55,7 @@ export const redactus = [
   "Q29sdW1ibw==",
   "ROl0ZWN0aXZl",
   "Rup0ZV9kdV9DYW5hZGE=",
-  "ROlmZW5zZXVyXyhmb290YmFsbCk=",
+  // "ROlmZW5zZXVyXyhmb290YmFsbCk=", BUG
   "RW5jbGF2ZV9ldF9leGNsYXZl"
   // Pont_du_Golden_Gate
 ].map((e) => {
