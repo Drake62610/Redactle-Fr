@@ -201,7 +201,6 @@ export default defineComponent({
               '#Voir_aussi',
             ) as HTMLElement
           }
-          console.log(deletableElement);
           deletableElement = deletableElement.parentElement as HTMLElement
 
           if (deletableElement) {
@@ -227,6 +226,14 @@ export default defineComponent({
             .forEach((e) => {
               e.remove()
             })
+
+          const links = this.cleanHtml.querySelectorAll('a')
+          links.forEach((link) => {
+            const el = this.cleanHtml.createElement('span')
+            console.log(link.innerHTML);
+            el.textContent = link.textContent
+            link.parentNode?.replaceChild(el, link)
+          })
 
           // Handle anchors
           // this.emptyHTMLCollection(this.cleanHtml.getElementsByTagName('a'))
@@ -262,7 +269,7 @@ export default defineComponent({
           })
 
           var titleHolder = this.cleanHtml.createElement('h1')
-          var titleTxt = decodeURI(this.name as string).replace(/[_\s]+/g, " ")
+          var titleTxt = decodeURI(this.name as string).replace(/[_\s]+/g, ' ')
           titleHolder.innerHTML = titleTxt
 
           this.cleanHtml.body.prepend(titleHolder)
@@ -281,17 +288,14 @@ export default defineComponent({
             e.removeAttribute('style')
           })
 
-          this.cleanHtml
-            .querySelectorAll(
-              'table',
-            ).forEach((e) => {
-              if (e.firstChild) {
-                (e as HTMLElement).innerHTML = (e as HTMLElement).innerText.replace(
-                  /([\.,:()\[\]?!;`\~\-\u2013\—&*"'«»%’/])/g,
-                  '<span class="punctuation">$1</span>',
-                )
-              }
-            })
+          this.cleanHtml.querySelectorAll('table').forEach((e) => {
+            if (e.firstChild) {
+              ;(e as HTMLElement).innerHTML = (e as HTMLElement).innerText.replace(
+                /([\.,:()\[\]?!;`\~\-\u2013\—&*"'«»%’/])/g,
+                '<span class="punctuation">$1</span>',
+              )
+            }
+          })
           // Warning
           this.cleanHtml
             .querySelectorAll(
@@ -299,26 +303,26 @@ export default defineComponent({
             )
             .forEach((e) => {
               if (e.firstChild) {
-                (e as HTMLElement).innerHTML = (e as HTMLElement).innerText.replace(
+                ;(e as HTMLElement).innerHTML = (e as HTMLElement).innerText.replace(
                   /([\.,:()\[\]?!;`\~\-\u2013\—&*"'«»%’/])/g,
                   '<span class="punctuation">$1</span>',
                 )
               }
             })
-            
-            // Empty ( ) filter not working
-            // this.cleanHtml
-            // .querySelectorAll(
-            //   '.punctuation, .innerTxt',
-            // ).forEach((e) => {
-            //   if (e.innerHTML === '(') {
-            //   console.log(e.nextElementSibling)
-            //     if (e.nextSibling?.parentElement?.innerHTML === ')') {
-            //       e.nextSibling?.parentElement?.remove();
-            //       e.remove();
-            //     }
-            //   }
-            // })
+
+          // Empty ( ) filter not working
+          // this.cleanHtml
+          // .querySelectorAll(
+          //   '.punctuation, .innerTxt',
+          // ).forEach((e) => {
+          //   if (e.innerHTML === '(') {
+          //   console.log(e.nextElementSibling)
+          //     if (e.nextSibling?.parentElement?.innerHTML === ')') {
+          //       e.nextSibling?.parentElement?.remove();
+          //       e.remove();
+          //     }
+          //   }
+          // })
 
           this.cleanHtml.body.innerHTML = this.cleanHtml.body.innerHTML
             .replace(/&lt;/g, '')
@@ -358,8 +362,6 @@ export default defineComponent({
             .filter((word) => {
               return !commonWords.includes(word)
             })
-
-            console.log(this.articleName)
 
           // Check if previous guess lead to win
           let hasWon = false
