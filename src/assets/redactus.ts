@@ -56,7 +56,17 @@ export const redactus = [
   "ROl0ZWN0aXZl",
   "Rup0ZV9kdV9DYW5hZGE=",
   // "ROlmZW5zZXVyXyhmb290YmFsbCk=", BUG
-  "RW5jbGF2ZV9ldF9leGNsYXZl"
+  "RW5jbGF2ZV9ldF9leGNsYXZl",
+  "V2lraQ==",
+  "VGhlX0Vjb25vbWlzdA==",
+  "RnJhZ2lsaXTp",
+  "RnV0c2Fs",
+  "RnJhbmNvcGhvbmll",
+  "QXNzZW1ibOllX2fpbulyYWxlX2Rlc19OYXRpb25zX3VuaWVz",
+  "TulidWxldXNlX3BsYW7pdGFpcmU=",
+  "TWFzc2FjcmVf4F9sYV90cm9u529ubmV1c2VfKGZpbG0sXzE5NzQp",
+  "U2ljaWxl",
+  "Q2Fyb3ViaWVy"
   // Pont_du_Golden_Gate
 ].map((e) => {
   return atob(e);
