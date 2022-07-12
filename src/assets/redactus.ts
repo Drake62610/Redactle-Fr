@@ -66,7 +66,13 @@ export const redactus = [
   "TulidWxldXNlX3BsYW7pdGFpcmU=",
   "TWFzc2FjcmVf4F9sYV90cm9u529ubmV1c2VfKGZpbG0sXzE5NzQp",
   "U2ljaWxl",
-  "Q2Fyb3ViaWVy"
+  "Q2Fyb3ViaWVy",
+  "UHN5Y2jpZOlsaXNtZQ==", // Psychedelisme
+  "UHJlbWllcl9FbXBpcmVfYnVsZ2FyZQ==",
+  "Rm9yY2VzX2ZyYW7nYWlzZXNfbGlicmVz",
+  "RG9tZXN0aWNhdGlvbl9kdV9jaGV2YWw=",
+  "TWVnYXVwbG9hZA==",
+  "VHJhcHBpc3RlXyhiaehyZSk="
   // Pont_du_Golden_Gate
 ].map((e) => {
   return atob(e);
