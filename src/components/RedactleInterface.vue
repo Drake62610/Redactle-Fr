@@ -249,6 +249,15 @@ export default defineComponent({
               </a>
             </label>
           </li>
+          <li class="nav-item">
+            <a
+              class="nav-link mx-2"
+              href="https://ko-fi.com/drakelionblanc"
+              style="cursor: pointer;"
+            >
+              Support
+            </a>
+          </li>
         </ul>
       </div>
       <button
