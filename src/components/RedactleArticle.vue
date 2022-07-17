@@ -160,7 +160,7 @@ export default defineComponent({
       if (!this.name) {
         throw Error('Article Name not found')
       }
-      this.articleName = decodeURI(this.name).split(/[:_'.-\s]+/)
+      this.articleName = decodeURI(this.name).split(/[:_',.-\s]+/)
       await axios
         .get<{ parse: { text: string } }>(
           `https://fr.wikipedia.org/w/api.php?action=parse&format=json&page=${this.name}&prop=text&formatversion=2&origin=*`,
@@ -230,7 +230,6 @@ export default defineComponent({
           const links = this.cleanHtml.querySelectorAll('a')
           links.forEach((link) => {
             const el = this.cleanHtml.createElement('span')
-            console.log(link.innerHTML);
             el.textContent = link.textContent
             link.parentNode?.replaceChild(el, link)
           })
@@ -417,6 +416,7 @@ export default defineComponent({
       this.articleName = this.articleName.filter(
         (articleWord) => articleWord !== value,
       )
+      console.log(this.articleName)
       return !this.articleName.length
     },
     emptyHTMLCollection(e: HTMLCollectionOf<HTMLElement>) {
