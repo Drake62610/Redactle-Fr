@@ -72,8 +72,11 @@ export const redactus = [
   "Rm9yY2VzX2ZyYW7nYWlzZXNfbGlicmVz",
   "RG9tZXN0aWNhdGlvbl9kdV9jaGV2YWw=",
   "TWVnYXVwbG9hZA==",
-  "VHJhcHBpc3RlXyhiaehyZSk="
-  // Pont_du_Golden_Gate
+  "VHJhcHBpc3RlXyhiaehyZSk=",
+  "TmlydmFuYV8obW9uZGVfaW5kaWVuKQ==",
+  "QmFpXyhjaGV2YWwp",
+  "UGFuZOltaWVfZGVfQ292aWQtMTk=",
+  "R3JhbmRlc19k6WNvdXZlcnRlcw=="
 ].map((e) => {
   return atob(e);
 });

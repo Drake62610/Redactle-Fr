@@ -416,7 +416,6 @@ export default defineComponent({
       this.articleName = this.articleName.filter(
         (articleWord) => articleWord !== value,
       )
-      console.log(this.articleName)
       return !this.articleName.length
     },
     emptyHTMLCollection(e: HTMLCollectionOf<HTMLElement>) {

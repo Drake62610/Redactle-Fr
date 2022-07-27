@@ -26,6 +26,7 @@ export default defineComponent({
       superHighlighted: document.createElement('div') as Element,
       redactusNumber: 0,
       redactusSolution: '',
+      yesterdaySolution: '',
       hasWon: false,
       focus: '',
       index: 0,
@@ -46,16 +47,19 @@ export default defineComponent({
   },
   async created() {
     const route = useRoute()
-    if (route.params.customName) {
-      this.customMode = true
-      this.redactusSolution = atob(route.params.customName as string)
-      return;
-    }
+    
     const diff = DateTime.fromObject({ day: 13, month: 5, year: 2022 })
       .diffNow('days')
       .toObject().days as number
     this.redactusNumber = Math.floor(Math.abs(diff ? +diff : 0))
     this.redactusSolution = redactus[this.redactusNumber - 1] as string
+    this.yesterdaySolution = redactus[this.redactusNumber - 2] as string
+
+    if (route.params.customName) {
+      this.customMode = true
+      this.redactusSolution = atob(route.params.customName as string)
+      return;
+    }
 
     if (localStorage.getItem('currentRedactus')) {
       if (
@@ -307,11 +311,6 @@ export default defineComponent({
         </template>
       </table>
     </nav>
-    <div
-      id="adsgoeshere"
-      style="background: #1d1f29; padding-top: 60px; text-align: center;"
-      v-html="adsenseContent"
-    ></div>
     <template v-if="hasWon && isReady">
       <RedactleStats
         :redactusNumber="redactusNumber"
@@ -325,7 +324,7 @@ export default defineComponent({
       class="container container-lg wikiHolder"
     >
       <CustomModal v-if="isReady" :enabled="showStats" />
-      <RedactleInfo v-if="isReady" :enabled="showInfo" />
+      <RedactleInfo v-if="isReady" :enabled="showInfo" :yesterdaySolution="yesterdaySolution" />
 
       <RedactleArticle
         @load="handleLoad"

@@ -8,6 +8,7 @@ export default defineComponent({
   name: 'CustomModal',
   props: {
     enabled: Boolean,
+    yesterdaySolution: String
   },
   data() {
     return {
@@ -47,6 +48,7 @@ export default defineComponent({
           <a>mots communs</a>
           ont déjà été révélés
         </p>
+        <p>La solution du redactus de hier était <b>{{yesterdaySolution}}</b></p>
         <br />
         <h2>Comment Jouer</h2>
         <p>
