@@ -84,7 +84,12 @@ export const redactus = [
   "U2VycGVudGVz",
   "SWRlbnRpdOlfKHNjaWVuY2VzX3NvY2lhbGVzKQ==",
   "Q2jidGVhdQ==",
-  "RW1waXJpc21l"
+  "RW1waXJpc21l",
+  "RW1waXJpc21l",
+  "U2FibGU=",
+  "VGjp4nRyZV9kdV9DaOJ0ZWxldA==",
+  "TW91Y2hvaXI=",
+  "VW5pdGVkX1N0YXRlc19BaXJfRm9yY2U="
 ].map((e) => {
   return atob(e);
 });
