@@ -89,7 +89,9 @@ export const redactus = [
   "U2FibGU=",
   "VGjp4nRyZV9kdV9DaOJ0ZWxldA==",
   "TW91Y2hvaXI=",
-  "VW5pdGVkX1N0YXRlc19BaXJfRm9yY2U="
+  "VW5pdGVkX1N0YXRlc19BaXJfRm9yY2U=",
+  "SGF3Ye9lbg==",
+  "QXN0cm9sb2dpZV9jaGlub2lzZQ==","RGlzcXVlX0JsdS1yYXk=","QmFucXVlX2QlMjdpbWFnZXM="
 ].map((e) => {
   return atob(e);
 });
