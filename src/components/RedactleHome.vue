@@ -50,7 +50,7 @@ export default defineComponent({
       <div class="collapse navbar-collapse ms-5" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link mx-2" href="/">
+            <a class="nav-link mx-2">
               Home
             </a>
           </li>
