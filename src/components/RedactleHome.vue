@@ -94,7 +94,7 @@ export default defineComponent({
       </button>
     </nav>
 
-    <div v-if="isReady" style="height: 50rem; background-color:black; color: #989898; overflow: scroll;">
+    <div v-if="isReady" style="background-color:black; color: #989898; overflow: scroll;">
       <br />
       <div class="container container-lg" >
         <h2>Résolus</h2>
@@ -113,7 +113,7 @@ export default defineComponent({
                   return a.number - b.number;
               })" :key="item.word">
                 <th scope="col">{{ item.number }}</th>
-                <th scope="col">{{ item.word.replace('_', ' ') }}</th>
+                <th scope="col">{{ decodeURI(item.word).replace(/[_\(]+/, '') }}</th>
                 <th scope="col">{{ item.hits }}</th>
                 <th scope="col">{{ item.accuracy }}</th>
                 <th v-if="!(redactusInProgressNumber === item.number)" @click="$router.push({ name: 'play', params: { number: item.number } })" scope="col" style="cursor: pointer;">🔄</th>

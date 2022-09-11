@@ -1,5 +1,6 @@
 html {
-  overflow: hidden;
+  
+  background-color: aqua;
 }
 
 /* color palette from <https://github.com/vuejs/theme> */
