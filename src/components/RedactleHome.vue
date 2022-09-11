@@ -113,7 +113,7 @@ export default defineComponent({
                   return a.number - b.number;
               })" :key="item.word">
                 <th scope="col">{{ item.number }}</th>
-                <th scope="col">{{ decodeURI(item.word).replace(/[_\(]+/, '') }}</th>
+                <th scope="col">{{ decodeURI(item.word).replace(/[_\(]+/, ' ') }}</th>
                 <th scope="col">{{ item.hits }}</th>
                 <th scope="col">{{ item.accuracy }}</th>
                 <th v-if="!(redactusInProgressNumber === item.number)" @click="$router.push({ name: 'play', params: { number: item.number } })" scope="col" style="cursor: pointer;">🔄</th>
@@ -135,7 +135,7 @@ export default defineComponent({
             </thead>
             <tbody>
               <template v-for="(item, index) in redactus" :key="item"> 
-                <tr v-if="!(index in solvedRedactusNumbers)">
+                <tr v-if="!(solvedRedactusNumbers.includes((index + 1)))">
                   <th scope="col">{{index + 1}}</th>
                   <!-- <th scope="col">{{item}}</th> -->
                   <th scope="col">{{'█'.repeat(item.length)}}</th>

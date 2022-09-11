@@ -49,13 +49,12 @@ export const redactus = [
   "QW1u6XNpZQ==",
   "Q2FsZW5kcmllcg==", // Calendrier
   "Q29xdWlsbGVfKHR5cG9ncmFwaGllKQ==",
-  "speedrun",
+  "U3BlZWRydW4=",
   "SW5n6W5pZXJpZV9zb2NpYWxlXyhz6WN1cml06V9kZV9sJTI3aW5mb3JtYXRpb24p",
   "U29hcF9vcGVyYQ==",
   "Q29sdW1ibw==",
   "ROl0ZWN0aXZl",
   "Rup0ZV9kdV9DYW5hZGE=",
-  // "ROlmZW5zZXVyXyhmb290YmFsbCk=", BUG
   "RW5jbGF2ZV9ldF9leGNsYXZl",
   "V2lraQ==",
   "VGhlX0Vjb25vbWlzdA==",
@@ -85,7 +84,7 @@ export const redactus = [
   "SWRlbnRpdOlfKHNjaWVuY2VzX3NvY2lhbGVzKQ==",
   "Q2jidGVhdQ==",
   "RW1waXJpc21l",
-  "RW1waXJpc21l",
+  "QmlsbGFyZF9mcmFu52Fpcw==",
   "U2FibGU=",
   "VGjp4nRyZV9kdV9DaOJ0ZWxldA==",
   "TW91Y2hvaXI=",
@@ -106,7 +105,7 @@ export const redactus = [
   "VHJpY2hlcmll",
   "Rm91ZHJl",
   "UG9sb2duZQ==",
-  "RGlvY+hzZQ=="
+  "RGlvY+hzZQ==",
 ].map((e) => {
   return atob(e);
 });
