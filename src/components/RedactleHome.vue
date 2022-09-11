@@ -111,13 +111,13 @@ export default defineComponent({
             <tbody>
               <tr v-for="(item) in stats.sort((a, b) => {
                   return a.number - b.number;
-              })" :key="item">
+              })" :key="item.word">
                 <th scope="col">{{ item.number }}</th>
                 <th scope="col">{{ item.word.replace('_', ' ') }}</th>
                 <th scope="col">{{ item.hits }}</th>
                 <th scope="col">{{ item.accuracy }}</th>
                 <th v-if="!(redactusInProgressNumber === item.number)" @click="$router.push({ name: 'play', params: { number: item.number } })" scope="col" style="cursor: pointer;">🔄</th>
-                <th v-if="redactusInProgressNumber === item.number" @click="$router.push({ name: 'play', params: { number: index + 1 } })" scope="col" style="cursor: pointer;">⏯</th>
+                <th v-if="redactusInProgressNumber === item.number" @click="$router.push({ name: 'play', params: { number: item.number } })" scope="col" style="cursor: pointer;">⏯</th>
               </tr>
             </tbody>
           </table>
