@@ -38,12 +38,7 @@ export default defineComponent({
       twitchInput: '',
       twitchChannel: '',
       twitchGuess: { user: '', message: '' },
-      adsenseContent: '',
     }
-  },
-  mounted() {
-    this.adsenseContent = document.getElementById('divadsensedisplaynone')
-      ?.innerHTML as string
   },
   async created() {
     const route = useRoute()
@@ -59,6 +54,12 @@ export default defineComponent({
       this.customMode = true
       this.redactusSolution = atob(route.params.customName as string)
       return;
+    }
+
+    if (route.params.number) {
+      this.redactusNumber = +(route.params.number as string)
+      this.redactusSolution = redactus[this.redactusNumber - 1] as string
+      // return;
     }
 
     if (localStorage.getItem('currentRedactus')) {
@@ -245,13 +246,6 @@ export default defineComponent({
             >
               Go
             </button>
-          </li>
-          <li class="nav-item">
-            <label class="nav-link mx-2">
-              <a style="cursor: pointer;" @click="$router.push('custom')">
-                Custom Mode
-              </a>
-            </label>
           </li>
           <li class="nav-item">
             <a

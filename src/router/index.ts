@@ -1,5 +1,6 @@
 import RedactleInterface from "@/components/RedactleInterface.vue"
 import CustomMode from "@/components/CustomMode.vue"
+import RedactleHome from "@/components/RedactleHome.vue"
 import { createRouter, createWebHistory } from "vue-router";
 
 const router = createRouter({
@@ -8,6 +9,11 @@ const router = createRouter({
     {
       path: "/",
       name: "Home",
+      component: RedactleHome,
+    },
+    {
+      path: "/play/:number",  // <-- notice the colon
+      name: "play",
       component: RedactleInterface,
     },
     {

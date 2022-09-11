@@ -38,9 +38,4 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="container container-lg" style="display: block;">
-    <h3>
-      Attention cette feature est en early BETA
-    </h3>
-  </div>
 </template>

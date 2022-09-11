@@ -16,7 +16,6 @@ export default defineComponent({
       db: new DBService('redactus'),
       guesses: new Array<Guess>(),
       correctHits: 0,
-      consecutive: 0,
       share: false,
       isReady: false,
     }
@@ -30,8 +29,6 @@ export default defineComponent({
       return e.count !== 0
     }).length
     await this.db.createObjectStore(['stats'])
-
-    this.consecutive = await this.computeConsecutive()
 
     const allWords = (await this.db.getAllValue('stats')) as UserStats[]
 
@@ -49,23 +46,6 @@ export default defineComponent({
     this.isReady = true
   },
   methods: {
-    async computeConsecutive(): Promise<number> {
-      const allValue = (await this.db.getAllValue('stats')) as UserStats[]
-      if (allValue.length < 2) {
-        return 0
-      }
-
-      let consecutive = 0
-      let currentNumber = allValue.reverse()[0].number
-      allValue.reverse().every((data) => {
-        if (currentNumber - data.number === 1) {
-          currentNumber = data.number
-          consecutive++
-        }
-        if (currentNumber - data.number > 1) return false
-      })
-      return consecutive
-    },
   },
 })
 </script>
@@ -73,8 +53,7 @@ export default defineComponent({
 <template>
   <div v-if="!customMode" class="container container-lg" style="display: block;">
     <h3>
-      Félicitation vous avez résolu le Redactus #{{ redactusNumber }}
-      (BETA)!
+      Félicitation vous avez résolu le Redactus #{{ redactusNumber }} !
     </h3>
     <ul v-if="isReady">
       <li>La réponse était: {{ redactusSolution }}</li>
@@ -83,7 +62,6 @@ export default defineComponent({
         Votre précision était
         {{ Math.round((correctHits / guesses.length) * 100) }}%
       </li>
-      <li>Vous avez résolu {{ consecutive }} Redactus consécutif</li>
     </ul>
 
     <!-- Sharingbutton Twitter -->
