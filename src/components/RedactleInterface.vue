@@ -36,6 +36,7 @@ export default defineComponent({
       twitchMode: false,
       customMode: false,
       twitchInput: '',
+      customCommand: '',
       twitchChannel: '',
       twitchGuess: { user: '', message: '' },
     }
@@ -186,6 +187,7 @@ export default defineComponent({
       v-if="twitchChannel != ''"
       @twitchGuess="inputTwitchUpdated"
       :twitchChannel="twitchChannel"
+      :customCommand="customCommand"
     />
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
       <span v-if="!customMode" class="navbar-brand mb-0 h1 mx-4">
@@ -229,24 +231,7 @@ export default defineComponent({
               </a>
             </label>
           </li>
-          <li class="nav-item" v-if="twitchMode">
-            <input
-              type="text"
-              class="form-text-lg"
-              autofocus
-              autocomplete="on"
-              placeholder="DrakeLeLionBlanc"
-              v-model="twitchInput"
-              @keyup.enter="updateStreamerName()"
-            />
-            <button
-              @click="updateStreamerName()"
-              class="btn btn-outline-secondary"
-              type="button"
-            >
-              Go
-            </button>
-          </li>
+          
           <li class="nav-item">
             <a
               class="nav-link mx-2"
@@ -255,6 +240,44 @@ export default defineComponent({
             >
               Support
             </a>
+          </li>
+          <li class="nav-item" v-if="twitchMode" style="line-height: 1.5rem;">
+            <template v-if="twitchChannel === ''">
+              <label>
+                <input
+                  type="text"
+                  class="form-text-lg"
+                  autofocus
+                  autocomplete="on"
+                  placeholder="DrakeLeLionBlanc"
+                  v-model="twitchInput"
+                  @keyup.enter="updateStreamerName()"
+                />
+              </label>
+              <label>
+              &nbsp;&nbsp;<span style="font-size: 2rem;">!</span> <input
+                type="text"
+                class="form-text-lg"
+                autofocus
+                autocomplete="on"
+                placeholder="chatCommand"
+                v-model="customCommand"
+              />
+            </label>
+              <button
+              @click="updateStreamerName()"
+              class="btn btn-outline-secondary"
+              type="button"
+            >
+              Go
+            </button>
+            </template>
+            <template v-if="twitchChannel !== ''">
+              <label class="nav-link mx-2" style="color: #4BB543">
+              {{twitchChannel}}'s channel connected' type !{{customCommand=== ''?'word !w' : customCommand}} in chat
+            </label>
+            </template>
+            
           </li>
         </ul>
       </div>

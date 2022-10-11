@@ -13,11 +13,13 @@ import type { UserStats } from '@/model/user-stats.data'
 export default defineComponent({
   props: {
     twitchChannel: String,
+    customCommand: String
   },
   async created() {
     if (this.twitchChannel) {
+      const validsCommands = ['w', 'word', 'mot', 'm', this.customCommand]
       ComfyJS.onCommand = (user, command, message, flags, extra) => {
-        if (command == 'word' && message.split(' ')[0] !== '') {
+        if (validsCommands.includes(command) && message.split(' ')[0] !== '') {
           this.$emit('twitchGuess', {
             user,
             message: message
